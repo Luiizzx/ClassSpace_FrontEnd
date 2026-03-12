@@ -1,15 +1,15 @@
-import './App.css'
+import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom'
 import { PageBuilder } from './pageBuilder'
+import { Home } from './pages/Home'
 
-function App() {
+export default function App() {
+  const [isLogged, setIsLogged] = useState(false);
+
   return (
     <Routes>
-      <Route element={<PageBuilder />} path="/">
-
-      </Route>
+      <Route element={<PageBuilder page={Home}/>} path="/" />
     </Routes>    
   )
 }
 
-export default App

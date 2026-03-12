@@ -1,23 +1,31 @@
-export function Header({isLogged}){
+import { Button } from "../buttons/button";
+
+export function Header({isLogged, onClickFn}){
   return(
-    <div className="bg-[#0d0d0e] w-full h-20 flex flex-row">
-      <div className="bg-inherit w-1/2 h-full justify-start">
-        <h1>
-          MyClassroom
+    <header className="bg-blue-600 h-20 w-full sticky flex flex-row">
+      <div className="bg-inherit w-1/3 sm:w-1/2 h-full flex items-center justify-start">
+        <h1 className="bg-clip-text text-transparent bg-linear-to-r from-white to-gray-200 font-semibold text-xl sm:text-2xl ml-4">
+          ClassSpace
         </h1>
       </div>
 
-      <div className="bg-inherit w-1/2 h-full justify-end">
+      <div className="bg-inherit w-2/3 sm:w-1/2 h-full flex items-center justify-end">
         {isLogged ? 
-          <button className="border-gray-400 w-1/6 h-16 bg-black border-2 rounded-lg">
-            L
-          </button>
+
+          <Button
+            onClick={() => onClickFn("/perfil")}
+            text={"L"}
+          />
         :
-          <button className="bg-inherit w-1/4 h-14 border-black border-2 rounded-xl hover:scale-105">
+          <button
+            onClick={() => onClickFn("/login")} 
+            className="bg-inherit w-1/2 sm:w-1/3 lg:w-1/5 h-12 border-white text-white border-2 rounded-xl 
+              hover:scale-105 transition mr-4"
+          >
             Fazer Login
           </button>
         }
       </div>
-    </div>
+    </header>
   )
 }
