@@ -1,4 +1,4 @@
-import { ClassCard } from "../components/cards/classCard";
+import { ClassCard } from "../../components/cards/classCard";
 
 export function Home({}){
  const classesData = [
