@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import { PageBuilder } from './pageBuilder'
 import { Home } from './pages/home/Home'
 import { Login } from './pages/login/Login';
+import { CreateAccount } from './pages/createAccount/CreateAccount';
 
 export default function App() {
   const [isLogged, setIsLogged] = useState(false);
@@ -11,11 +12,19 @@ export default function App() {
     <Routes>
       <Route 
         element={<PageBuilder isLogged={isLogged} page={Home}/>} 
-        path="/" />
+        path="/" 
+      />
         
       <Route 
         element={<Login setIsLogged={setIsLogged} />} 
-        path="/login" />
+        path="/login" 
+      />
+
+      <Route
+        element={<CreateAccount />}
+        path="/create"
+      />
+
     </Routes>    
   )
 }
