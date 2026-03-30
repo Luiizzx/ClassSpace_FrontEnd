@@ -57,15 +57,17 @@ export function Login({setIsLogged}){
                   maxLength={8}
                   type={isHidden ? "password" : "text"}
                   onChange={onPasswordChange}
-                  className="ml-2 bg-inherit w-3/4 h-full focus:border-0 focus:outline-0" 
+                  className="ml-2 bg-inherit w-2/3 text-gray-800 sm:w-3/4 h-full focus:border-0 focus:outline-0" 
                 />
-
-                <button 
-                  onClick={() => setIsHidden(!isHidden)}
-                  className="text-gray-600 text-base mr-2"
-                >
-                  {isHidden ? <EyeOff /> : <Eye />}
-                </button>
+                
+                <div className="flex-1 flex flex-col h-full items-end justify-center">
+                  <button 
+                    onClick={() => setIsHidden(!isHidden)}
+                    className="text-gray-600 text-base h-full mr-2 w-1/2"
+                  >
+                    {isHidden ? <EyeOff /> : <Eye />}
+                  </button>
+                </div>
               </div>
             </div>
             
