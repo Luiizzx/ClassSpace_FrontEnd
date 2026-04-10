@@ -1,4 +1,4 @@
-# FrontEnd do projeto MyClassRoom
+# Setup do FrontEnd
 
 Esse FrontEnd foi feito utilizando React JS, com Node na versão 25.6.1.
 
