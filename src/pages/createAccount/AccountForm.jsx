@@ -32,13 +32,13 @@ export function AccountForm({moveRole, onClickMoveForm}){
 
   return(
       <div className={`w-11/12 sm:w-4/5 md:w-1/2 xl:w-1/3 h-4/5 sm:h-11/12 bg-gray-200 shadow-lg shadow-gray-500
-        flex flex-col mt-16 sm:mt-0 rounded-xl gap-16 ${moveRole ? "translate-x-0" : "translate-x-[150%]"}`}
+        flex flex-col mt-16 sm:mt-0 rounded-xl gap-16 `}
       >
-        <div className="w-full h-1/6 rounded-t-xl flex flex-row pt-12">
-          <div className="bg-inherit w-1/5 h-full flex flex-col items-center justify-center">
-          
-            <button className="bg-inherit" onClick={onClickMoveForm}>
-              <ArrowBigLeftDash className="text-gray-500"/>
+        <div className="relative w-full h-1/6 rounded-t-xl flex flex-col items-center pt-12">
+          <div className="absolute bg-inherit w-1/5 h-1/6 top-18 left-2 flex flex-col items-center justify-center">
+
+            <button className="bg-inherit h-12 w-12" onClick={onClickMoveForm}>
+              <ArrowBigLeftDash className="text-blue-700"/>
             </button>
           </div>
 
