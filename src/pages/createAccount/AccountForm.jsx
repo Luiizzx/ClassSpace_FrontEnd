@@ -1,33 +1,52 @@
 import { ArrowBigLeftDash, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { fetchBuilder } from "../../utils/fetchBuilder";
 
-export function AccountForm({moveRole, onClickMoveForm}){
-  
+export function AccountForm({user, setUser, moveRole, onClickMoveForm}){
   const [isHidden, setIsHidden] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [userPassword, setUserPassword] = useState({
-    password: "",
-    confirmPassword: ""
-  });
+  const [confirmPass, setConfirmPass] = useState("");
   
+  function onConfirmPassChange(e){
+    let value = e.target.value;
 
-  function onNameChange(){ setName(e.target.value); }
-  function onEmailChange(){ setEmail(e.target.value); }
+    if (value.length == 8){ return; }
+    setConfirmPass(value);
+  }
 
-  function onPasswordChange(){ 
+  function onChangeFn(e){ 
     const {name, value} = e.target;
 
-    if(value.length == 8){
+    if(name == "password" && value.length == 8){ return; }
+
+    setUser((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  }
+
+  async function onRegister(){
+    if(user.password !== confirmPass){
+      alert("As senhas não podem ser diferentes.");
       return;
     }
 
-    setUserPassword((prev) => ({
-      ...prev,
-      [name]: value
-    })); 
+    setLoading(true);
+
+    try{
+      const result = await fetchBuilder("POST", "/create-acc",
+        { name: user.name, email: user.email, 
+          password: user.password, role: user.role 
+        });
+
+      console.log(result);
+    }
+    catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
   }
 
   return(
@@ -63,7 +82,9 @@ export function AccountForm({moveRole, onClickMoveForm}){
             <div className="w-full h-12 bg-gray-300 flex flex-row items-center border-blue-700 border-2 rounded-xl">
               <Mail className="text-blue-700 text-base ml-2"/>
               <input
-                onChange={onNameChange}
+                name="name"
+                onChange={(e) => onChangeFn(e)}
+                value={user.name}
                 className="ml-2 bg-inherit w-3/4 h-full focus:border-0 focus:bg-inherit focus:outline-0 text-gray-800" 
               />
             </div>
@@ -77,7 +98,9 @@ export function AccountForm({moveRole, onClickMoveForm}){
             <div className="w-full h-12 bg-gray-300 flex flex-row items-center border-blue-700 border-2 rounded-xl">
               <Mail className="text-blue-700 text-base ml-2"/>
               <input
-                onChange={onEmailChange}
+                name="email"
+                onChange={(e) => onChangeFn(e)}
+                value={user.email}
                 className="ml-2 bg-inherit w-3/4 h-full focus:border-0 focus:bg-inherit focus:outline-0 text-gray-800" 
               />
             </div>
@@ -93,9 +116,11 @@ export function AccountForm({moveRole, onClickMoveForm}){
                 <Lock className="text-blue-700 text-base ml-2"/>
             
                 <input
+                  name="password"
                   maxLength={8}
                   type={isHidden ? "password" : "text"}
-                  onChange={onPasswordChange}
+                  value={user.password}
+                  onChange={(e) => onChangeFn(e)}
                   className="ml-2 bg-inherit w-3/4 h-full focus:border-0 focus:outline-0" 
                 />
 
@@ -121,7 +146,7 @@ export function AccountForm({moveRole, onClickMoveForm}){
                 <input
                   maxLength={8}
                   type={isHidden ? "password" : "text"}
-                  onChange={onPasswordChange}
+                  onChange={(e) => onConfirmPassChange(e)}
                   className="ml-2 bg-inherit w-3/4 h-full focus:border-0 focus:outline-0" 
                 />
 
@@ -138,8 +163,10 @@ export function AccountForm({moveRole, onClickMoveForm}){
 
         <div className="bg-inherit h-1/5 rounded-b-xl flex flex-col pt-4 md:pt-12 gap-2 items-center justify-center">
           <button
-            onClick={""} 
-            className="bg-blue-700 text-gray-200 w-4/5 h-12 rounded-xl hover:scale-[1.02] text-xl hover:bg-blue-600 transition"
+            disabled={loading}
+            onClick={onRegister} 
+            className={`${loading ? "bg-gray-500" : "bg-blue-700 hover:scale-[1.02] hover:bg-blue-600 transition" } 
+              text-xl text-gray-200 w-4/5 h-12 rounded-xl`}
           >
             Confirmar
           </button>

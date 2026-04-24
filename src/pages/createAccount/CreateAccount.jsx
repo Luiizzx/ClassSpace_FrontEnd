@@ -7,9 +7,17 @@ export function CreateAccount(){
   const [role, setRole] = useState(true);
   const [form, setForm] = useState(false);
   const [moveRole, setMoveRole] = useState(false);
-  const [moveForm, setMoveForm] = useState(true);
 
-  function onClickMoveRole(){
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: ""
+  });
+
+  function onClickMoveRole(role){
+    setUser(prev => ({...prev, role: role}));
+
     setForm(true);
     setMoveRole(true);
 
@@ -31,15 +39,23 @@ export function CreateAccount(){
       <div className="w-full h-screen bg-linear-to-r from-blue-800 to-blue-900 flex sm:items-center justify-center 
         overflow-hidden"
       >
-        <RoleSelection
-          moveRole={moveRole}
-          onClickMoveRole={onClickMoveRole}
-        />
+
+        { role &&
+          <RoleSelection
+            setUser={setUser}
+            moveRole={moveRole}
+            confirmRole={onClickMoveRole}
+          />
+        }
       
-        <AccountForm 
-          moveRole={moveRole} 
-          onClickMoveForm={onClickMoveForm}
-        />
+        { form &&
+          <AccountForm
+            user={user}
+            setUser={setUser} 
+            moveRole={moveRole} 
+            onClickMoveForm={onClickMoveForm}
+          />
+        }
       </div>
   )
 }
