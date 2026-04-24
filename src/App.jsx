@@ -6,12 +6,12 @@ import { Login } from './pages/login/Login';
 import { CreateAccount } from './pages/createAccount/CreateAccount';
 
 export default function App() {
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(true);
 
   return (
     <Routes>
       <Route 
-        element={<PageBuilder isLogged={isLogged} page={Home}/>} 
+        element={<PageBuilder isLogged={isLogged} page={<Home isLogged={isLogged}/>}/>} 
         path="/" 
       />
         
