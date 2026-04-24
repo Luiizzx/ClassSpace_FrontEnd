@@ -19,8 +19,8 @@ export function Header({isLogged, onClickFn}){
         :
           <button
             onClick={() => onClickFn("/login")} 
-            className="bg-inherit w-1/2 sm:w-1/3 lg:w-1/5 h-12 border-white text-white border-2 rounded-xl 
-              hover:scale-105 transition mr-4"
+            className="bg-inherit w-3/5 sm:w-1/3 lg:w-1/5 h-12 border-white text-white border-2 rounded-xl 
+              hover:scale-[1.02] transition mr-4"
           >
             Fazer Login
           </button>

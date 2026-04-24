@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { BookPlusIcon, House} from "lucide-react";
 
 export function PageBuilder({isLogged, page}){
-  const Page = page; 
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -18,10 +17,10 @@ export function PageBuilder({isLogged, page}){
       <Header isLogged={isLogged} onClickFn={onNavigate}/>
 
       <div className="bg-gray-200 flex-1 overflow-y-auto">
-        {<Page />}
+        {page}
       </div>
 
-      <div className="hidden h-28 w-24 md:flex flex-col gap-2 absolute bottom-2 right-0">
+      <div className="hidden h-28 w-24 sm:flex flex-col gap-2 absolute bottom-2 right-0">
         <div className="w-full h-1/2 flex justify-end">
           <Button
             extraStyles={"hover:scale-[1.02]"}
