@@ -1,9 +1,9 @@
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchBuilder } from "../../utils/fetchBuilder";
+import { fetchBuilder } from "../../services/fetchBuilder";
 
-export function Login({setIsLogged}){
+export function Login(){
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,37 +11,22 @@ export function Login({setIsLogged}){
   const [loading, setLoading] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
 
-  function onEmailChange(e){
-    setEmail(e.target.value);
-  }
-
-  function onPasswordChange(e){
-    let value = e.target.value;
-
-    if(value.length > 16){
-      return;
-    }
-
-    setPassword(e.target.value);
-  }
-
   async function onLogin(){
     setLoading(true);
 
     try{
-      const result = await fetchBuilder("POST", "/login", { email, password });
+      const result = await fetchBuilder("POST", "/auth/login", { email, password });
       console.log(result);
     }
     catch(error){
       console.log(error);
     }
-    setIsLogged(true);
     setLoading(false);
   }
 
   return(
-    <div className="w-full h-screen bg-linear-to-r from-blue-700 to-blue-800 flex sm:items-center justify-center">
-      <div className="w-11/12 sm:w-4/5 xl:w-1/3 h-3/4 sm:h-4/5 bg-gray-200 flex flex-col mt-16 sm:mt-0 rounded-xl gap-16">
+    <div className="w-full h-screen bg-linear-to-r from-white to-gray-200 flex sm:items-center justify-center">
+      <div className="w-11/12 sm:w-4/5 xl:w-1/3 h-3/4 sm:h-4/5 flex flex-col mt-16 sm:mt-0 rounded-xl gap-16">
         <div className="w-full h-1/6 rounded-t-xl flex flex-col gap-2 pt-12 items-center justify-center">
           <h1 
             className="bg-clip-text text-transparent bg-linear-to-r from-blue-700 to-blue-500 font-semibold text-4xl"
@@ -62,7 +47,8 @@ export function Login({setIsLogged}){
               <Mail className="text-blue-700 text-base ml-2"/>
               <input
                 type="email"
-                onChange={onEmailChange}
+                maxLength={100}
+                onChange={(e) => setEmail(e.target.value)}
                 className="ml-2 bg-inherit w-3/4 h-full focus:border-0 focus:bg-inherit focus:outline-0 text-gray-800" 
               />
             </div>
@@ -78,9 +64,9 @@ export function Login({setIsLogged}){
                 <Lock className="text-blue-700 text-base ml-2"/>
             
                 <input
-                  maxLength={8}
+                  maxLength={16}
                   type={isHidden ? "password" : "text"}
-                  onChange={onPasswordChange}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="ml-2 bg-inherit w-2/3 text-gray-800 sm:w-3/4 h-full focus:border-0 focus:outline-0" 
                 />
                 

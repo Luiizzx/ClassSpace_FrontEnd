@@ -4,55 +4,51 @@ import { RoleSelection } from "./RoleSelection"
 
 export function CreateAccount(){
 
-  const [role, setRole] = useState(true);
-  const [form, setForm] = useState(false);
-  const [moveRole, setMoveRole] = useState(false);
+  const [screen, setScreen] = useState({ role: true, form: false });
 
   const [user, setUser] = useState({
+    id: null,
     name: "",
     email: "",
     password: "",
     role: ""
   });
 
-  function onClickMoveRole(role){
-    setUser(prev => ({...prev, role: role}));
-
-    setForm(true);
-    setMoveRole(true);
+  function onClickMoveRole(){
+    setTimeout(() => {
+      setScreen({ role: false, form: false});
+    }, 500);
 
     setTimeout(() => {
-      setRole(false);
-    }, 2000);
+      setScreen(prev => ({ ...prev, form: true }));
+    }, 1000);
   }
 
   function onClickMoveForm(){
-    setMoveRole(false);
-    // setRole(true);
+    setTimeout(() => {
+      setScreen({ role: false, form: false });
+    }, 500);
 
     setTimeout(() => {
-      setForm(false)
-    }, 2000);
+      setScreen(prev => ({ ...prev, role: true }));
+    }, 1000);
   }
 
   return(
-      <div className="w-full h-screen bg-linear-to-r from-blue-800 to-blue-900 flex sm:items-center justify-center 
-        overflow-hidden"
-      >
+      <div className="w-full h-screen bg-linear-to-r from-white to-gray-200 flex sm:items-center justify-center overflow-hidden">
 
-        { role &&
+        { screen.role &&
           <RoleSelection
+            role={user.role}
             setUser={setUser}
-            moveRole={moveRole}
-            confirmRole={onClickMoveRole}
+            onClickMoveRole={onClickMoveRole}
           />
         }
       
-        { form &&
+        { screen.form &&
           <AccountForm
             user={user}
             setUser={setUser} 
-            moveRole={moveRole} 
             onClickMoveForm={onClickMoveForm}
           />
         }

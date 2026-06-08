@@ -6,7 +6,6 @@ import { Plus, Search } from "lucide-react";
 export function Home({isLogged}) {
   const [display, setDisplay] = useState(null);
 
-  // const classesData = [];
   const classesData = [
     {
       key: 1,

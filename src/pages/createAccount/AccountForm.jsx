@@ -1,25 +1,16 @@
 import { ArrowBigLeftDash, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchBuilder } from "../../utils/fetchBuilder";
+import { fetchBuilder } from "../../services/fetchBuilder";
 
-export function AccountForm({user, setUser, moveRole, onClickMoveForm}){
+export function AccountForm({ user, setUser, onClickMoveForm }){
   const [isHidden, setIsHidden] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [confirmPass, setConfirmPass] = useState("");
-  
-  function onConfirmPassChange(e){
-    let value = e.target.value;
-
-    if (value.length == 8){ return; }
-    setConfirmPass(value);
-  }
 
   function onChangeFn(e){ 
     const {name, value} = e.target;
-
-    if(name == "password" && value.length == 8){ return; }
 
     setUser((prev) => ({
       ...prev,
@@ -28,6 +19,7 @@ export function AccountForm({user, setUser, moveRole, onClickMoveForm}){
   }
 
   async function onRegister(){
+
     if(user.password !== confirmPass){
       alert("As senhas não podem ser diferentes.");
       return;
@@ -36,7 +28,7 @@ export function AccountForm({user, setUser, moveRole, onClickMoveForm}){
     setLoading(true);
 
     try{
-      const result = await fetchBuilder("POST", "/create-acc",
+      const result = await fetchBuilder("POST", "/auth/create-acc",
         { name: user.name, email: user.email, 
           password: user.password, role: user.role 
         });
@@ -50,14 +42,14 @@ export function AccountForm({user, setUser, moveRole, onClickMoveForm}){
   }
 
   return(
-      <div className={`w-11/12 sm:w-4/5 md:w-1/2 xl:w-1/3 h-4/5 sm:h-11/12 bg-gray-200 shadow-lg shadow-gray-500
-        flex flex-col mt-16 sm:mt-0 rounded-xl gap-16 ${moveRole ? "translate-x-0" : "translate-x-[150%]"}`}
+      <div className={`w-11/12 sm:w-4/5 md:w-1/2 xl:w-1/3 h-4/5 sm:h-11/12
+        flex flex-col items-center mt-16 sm:mt-0 rounded-xl gap-8`}
       >
-        <div className="w-full h-1/6 rounded-t-xl flex flex-row pt-12">
-          <div className="bg-inherit w-1/5 h-full flex flex-col items-center justify-center">
+        <div className="w-11/12 h-1/6 rounded-t-xl flex flex-row pt-12">
+          <div className="bg-inherit h-full flex flex-col items-center justify-center">
           
             <button className="bg-inherit" onClick={onClickMoveForm}>
-              <ArrowBigLeftDash className="text-gray-500"/>
+              <ArrowBigLeftDash size={32} className="text-blue-700"/>
             </button>
           </div>
 
@@ -72,14 +64,14 @@ export function AccountForm({user, setUser, moveRole, onClickMoveForm}){
           </div>
         </div>
 
-        <div className="bg-inherit w-full h-2/5 gap-2 md:gap-4 pt-6 flex flex-col items-center justify-center">
+        <div className="bg-inherit w-full h-1/2 gap-2 md:gap-4 pt-6 flex flex-col items-center justify-center">
           <div className="bg-inherit w-11/12 h-1/2 flex flex-col">
 
             <p className="text-gray-700 text-base ml-2">
               Nome de usuário
             </p>
 
-            <div className="w-full h-12 bg-gray-300 flex flex-row items-center border-blue-700 border-2 rounded-xl">
+            <div className="w-full h-12 bg-gray-200 flex flex-row items-center border-blue-700 border-2 rounded-xl">
               <Mail className="text-blue-700 text-base ml-2"/>
               <input
                 name="name"
@@ -95,7 +87,7 @@ export function AccountForm({user, setUser, moveRole, onClickMoveForm}){
               E-mail
             </p>
 
-            <div className="w-full h-12 bg-gray-300 flex flex-row items-center border-blue-700 border-2 rounded-xl">
+            <div className="w-full h-12 bg-gray-200 flex flex-row items-center border-blue-700 border-2 rounded-xl">
               <Mail className="text-blue-700 text-base ml-2"/>
               <input
                 name="email"
@@ -112,7 +104,7 @@ export function AccountForm({user, setUser, moveRole, onClickMoveForm}){
                 Senha
               </p>
 
-              <div className="w-full h-12 bg-gray-300 flex flex-row items-center border-blue-700 border-2 rounded-xl">
+              <div className="w-full h-12 bg-gray-200 flex flex-row items-center border-blue-700 border-2 rounded-xl">
                 <Lock className="text-blue-700 text-base ml-2"/>
             
                 <input
@@ -140,13 +132,13 @@ export function AccountForm({user, setUser, moveRole, onClickMoveForm}){
                 Confirmar Senha
               </p>
 
-              <div className="w-full h-12 bg-gray-300 flex flex-row items-center border-blue-700 border-2 rounded-xl">
+              <div className="w-full h-12 bg-gray-200 flex flex-row items-center border-blue-700 border-2 rounded-xl">
                 <Lock className="text-blue-700 text-base ml-2"/>
             
                 <input
                   maxLength={8}
                   type={isHidden ? "password" : "text"}
-                  onChange={(e) => onConfirmPassChange(e)}
+                  onChange={(e) => setConfirmPass(e.target.value)}
                   className="ml-2 bg-inherit w-3/4 h-full focus:border-0 focus:outline-0" 
                 />
 
@@ -161,7 +153,7 @@ export function AccountForm({user, setUser, moveRole, onClickMoveForm}){
           </div>
         </div>
 
-        <div className="bg-inherit h-1/5 rounded-b-xl flex flex-col pt-4 md:pt-12 gap-2 items-center justify-center">
+        <div className="bg-inherit w-11/12 h-1/5 rounded-b-xl flex flex-col pt-4 md:pt-12 gap-2 items-center justify-center">
           <button
             disabled={loading}
             onClick={onRegister} 

@@ -3,7 +3,7 @@ import { Button } from "./components/buttons/button";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BookPlusIcon, House} from "lucide-react";
 
-export function PageBuilder({isLogged, page}){
+export function PageBuilder({ isLogged, page }){
   const navigate = useNavigate();
   const location = useLocation();
   
