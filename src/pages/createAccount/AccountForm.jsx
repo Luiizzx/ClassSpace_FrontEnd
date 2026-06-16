@@ -1,9 +1,11 @@
 import { ArrowBigLeftDash, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchBuilder } from "../../services/fetchBuilder";
 
 export function AccountForm({ user, setUser, onClickMoveForm }){
+  const navigate = useNavigate();
+
   const [isHidden, setIsHidden] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -34,6 +36,7 @@ export function AccountForm({ user, setUser, onClickMoveForm }){
         });
 
       console.log(result);
+      navigate("/")
     }
     catch (error) {
       console.log(error);

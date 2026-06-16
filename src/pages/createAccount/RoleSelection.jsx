@@ -1,9 +1,7 @@
 import { Check, GraduationCap, University } from "lucide-react";
 import { Link } from "react-router-dom";
-
+import { roles } from "../../constants/roles";
 export function RoleSelection({ role, setUser, onClickMoveRole }){
-  
-  const roles = { STUDENT: "STUDENT", TEACHER: "TEACHER" };
 
   return(
     <div className={`w-11/12 sm:w-4/5 md:w-3/5 h-4/5 sm:h-11/12

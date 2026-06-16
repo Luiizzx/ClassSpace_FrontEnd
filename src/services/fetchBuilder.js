@@ -11,8 +11,7 @@ export async function fetchBuilder(method, route, obj, headers) {
       body: method.toUpperCase() !== "GET" ? JSON.stringify(obj) : undefined,
     });
 
-    const data = await result.json();
-    return data;
+    return result;
   } catch (error) {
     console.log(error);
   }

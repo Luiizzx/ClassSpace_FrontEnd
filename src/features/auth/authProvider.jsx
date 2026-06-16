@@ -9,24 +9,23 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     async function authUser(){
-      try {
-        const result = await fetchBuilder("POST", "/auth");
-        setUser(result);
+      setLoading(true);
+
+      const result = await fetchBuilder("GET", "/auth");
+
+      if (result.ok){
+        const data = await result.json();
+
+        setUser(data);
       }
-      catch (error) {
-        console.log(error);
-      }
-      finally{
-        setLoading(false);
-      }
+
+      setLoading(false);
     } 
     authUser();
   }, []);
 
-  if (loading) return <Loader2 className="animate-spin" />;
-
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, setUser, loading }}>
       {children}
     </AuthContext.Provider>
   );

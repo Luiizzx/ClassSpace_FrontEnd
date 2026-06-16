@@ -1,11 +1,14 @@
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchBuilder } from "../../services/fetchBuilder";
+import { useAuth } from "../../features/auth/AuthContext";
 
 export function Login(){
-  
-  const [email, setEmail] = useState("");
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState(""); 
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
@@ -13,15 +16,21 @@ export function Login(){
 
   async function onLogin(){
     setLoading(true);
-
+    
     try{
       const result = await fetchBuilder("POST", "/auth/login", { email, password });
-      console.log(result);
+      const data = await result.json();
+
+      setUser(data);
+
+      navigate("/");
     }
     catch(error){
-      console.log(error);
+      console.log(error)
     }
-    setLoading(false);
+    finally{
+      setLoading(false);
+    }
   }
 
   return(
@@ -105,7 +114,7 @@ export function Login(){
           </button>
 
           <Link 
-            to="/create"
+            to="/criar-conta"
             className="text-base text-blue-700 hover:text-blue-600 transition"
           >
             Ainda não tem conta?
