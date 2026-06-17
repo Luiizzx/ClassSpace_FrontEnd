@@ -7,6 +7,7 @@ import { roles } from "../../constants/roles";
 import { fetchBuilder } from "../../services/fetchBuilder";
 import { CreateClass } from "../../components/forms/createClass";
 import { AddClass } from "../../components/dialogs/addClass";
+import toast from "react-hot-toast";
 
 export function Home() {
   const { user, loading: loadingUser } = useAuth();
@@ -64,19 +65,17 @@ export function Home() {
     async function loadClasses(){
       setLoading(true);
 
-      try{
-        const response = await fetchBuilder("GET", `/class/getAll/${user.id}`);
-        const data = await response.json();
+      const response = await fetchBuilder("GET", `/class/getAll/${user.id}`);
+      const data = await response.json();
 
+      if(response.ok){
         setClasses(data);
       }
-      catch(error){
-        console.log(error.message);
-      }
-      finally{
-        setLoading(false);
+      else{
+        toast.error(data.message);
       }
 
+      setLoading(false);
     }
     loadClasses();
   }, []);

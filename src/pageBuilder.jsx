@@ -23,13 +23,12 @@ export function PageBuilder(){
       <main className="bg-gray-200 flex-1 overflow-y-auto">
         <Outlet />
       </main>
-
+{/* 
       <div className="hidden h-28 w-24 sm:flex flex-col gap-2 absolute bottom-2 right-0">
         <div className="w-full h-1/2 flex justify-end">
           <Button
             extraStyles={"hover:scale-[1.02]"}
             icon={<BookPlusIcon />} 
-            // onClick={openDialog}
           />
         </div>
 
@@ -40,7 +39,7 @@ export function PageBuilder(){
             icon={<House />} 
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

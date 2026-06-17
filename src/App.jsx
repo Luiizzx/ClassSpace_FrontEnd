@@ -5,12 +5,20 @@ import { Login } from './pages/login/Login';
 import { CreateAccount } from './pages/createAccount/CreateAccount';
 import { AuthProvider } from './features/auth/authProvider';
 import { Router } from './router/Router';
+import { Toaster } from 'react-hot-toast';
 
 export default function App() {  
   return (
-    <AuthProvider>
-      <Router />
-    </AuthProvider>
+    <>
+      <Toaster
+        position="top-center"
+        toastOptions={ { duration: 3000 } }
+      />
+      
+      <AuthProvider>
+        <Router />
+      </AuthProvider>
+    </>
   )
 }
 

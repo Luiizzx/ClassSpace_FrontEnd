@@ -5,6 +5,8 @@ import { PageBuilder } from "../pageBuilder";
 import { CreateAccount } from "../pages/createAccount/CreateAccount";
 import { Login } from "../pages/login/Login";
 import { Participants } from "../pages/participants/Participants";
+import { PostsList } from "../pages/posts/PostsList";
+import { Post } from "../pages/posts/Post";
 
 export function Router(){
   return(
@@ -15,6 +17,8 @@ export function Router(){
       <Route element={ <ProtectedRoute /> } >
         <Route element={ <PageBuilder />}>
           <Route element={ <Home /> } path="/" />   
+          <Route element={ <PostsList /> } path="/posts/:classId" />
+          <Route element={ <Post />} path="/post/:classId/:postId"/>
           <Route element={ <Participants /> } path="/participants/:classId" />
         </Route>
       </Route>       

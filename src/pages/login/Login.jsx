@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchBuilder } from "../../services/fetchBuilder";
 import { useAuth } from "../../features/auth/AuthContext";
+import toast from "react-hot-toast";
 
 export function Login(){
   const { setUser } = useAuth();
@@ -12,26 +13,25 @@ export function Login(){
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [isHidden, setIsHidden] = useState(false);
+  const [isHidden, setIsHidden] = useState(true);
 
   async function onLogin(){
     setLoading(true);
-    
-    try{
-      const result = await fetchBuilder("POST", "/auth/login", { email, password });
-      const data = await result.json();
+  
+    const result = await fetchBuilder("POST", "/auth/login", { email, password });
+    const data = await result.json();
 
-      setUser(data);
-
-      navigate("/");
-    }
-    catch(error){
-      console.log(error)
-    }
-    finally{
+    if(!result.ok){
+      toast.error(data.message);
       setLoading(false);
+
+      return;
     }
+
+    setUser(data);
+    navigate("/");
   }
+  
 
   return(
     <div className="w-full h-screen bg-linear-to-r from-white to-gray-200 flex sm:items-center justify-center">
