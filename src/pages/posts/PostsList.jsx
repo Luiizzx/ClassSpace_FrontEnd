@@ -3,10 +3,12 @@ import { useParams, Link } from "react-router-dom";
 import { useAuth } from "../../features/auth/AuthContext";
 import { fetchBuilder } from "../../services/fetchBuilder";
 import { ChevronLeft, ChevronRight, Loader2, Plus } from "lucide-react";
-import { CreatePost } from "../../components/forms/createPost";
+import { CreatePost } from "../../components/dialogs/createPost";
 import { PostCard } from "../../components/cards/postCard";
 import toast from "react-hot-toast";
 import { NoContentWarning } from "../../components/noContentWarning";
+import { PageTitleCard } from "../../components/cards/pageTitleCard";
+import { PageNavigationSection } from "../../components/pageNavigationSection";
 
 export function PostsList(){
   const{ user, loading: loadingUser } = useAuth();
@@ -66,31 +68,16 @@ export function PostsList(){
         :
         (
           <>
-            <div className="bg-linear-to-r from-blue-950 to-blue-800 w-10/12 lg:w-3/4 h-20 mt-2 mb-3 rounded-lg flex
-              items-center justify-center pl-2 pr-2"
-            >
-              <h1 className="text-3xl text-white">{postsList.className}</h1>
-            </div>
-
-            <div className="w-10/12 lg:w-2/3 border-b border-gray-600 flex flex-row items-center justify-center text-gray-900">
-              <Link
-                to={`/assignments/${classId}`}
-              >
-                <ChevronLeft size={32} strokeWidth={1}/>
-              </Link>
-              <div className="flex flex-1 items-center justify-center py-1">
-                <h2 className="text-2xl">Postagens</h2>
-              </div>
-
-              <Link
-                to={`/participants/${classId}`}
-              >
-                <ChevronRight size={32} strokeWidth={1}/>
-              </Link>
-            </div>
+            <PageTitleCard title={postsList.className}/>
+            
+            <PageNavigationSection 
+              sectionTitle={"Postagens"} 
+              leftRoute={`/assignments/${classId}`} 
+              rightRoute={`/participants/${classId}`}
+            />
 
             {postsList.posts.length > 0 ? 
-              <div className="flex flex-col gap-2 items-center justify-center w-full mt-4">
+              <div className="flex flex-col gap-2 items-center justify-center w-10/12 lg:w-3/4 mt-4">
                 {postsList.posts.map((post, index) => (
                   <PostCard 
                     key={index}

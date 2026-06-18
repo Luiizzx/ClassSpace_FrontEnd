@@ -6,6 +6,8 @@ import { roles } from "../../constants/roles";
 import { ChevronLeft, ChevronRight, TriangleAlert } from "lucide-react";
 import toast from "react-hot-toast";
 import { NoContentWarning } from "../../components/noContentWarning";
+import { PageTitleCard } from "../../components/cards/pageTitleCard";
+import { PageNavigationSection } from "../../components/pageNavigationSection";
 
 export function Participants(){
   const { user, loading: loadingUser } = useAuth();
@@ -54,23 +56,13 @@ export function Participants(){
         />
       ) : (
         <>
-          <div className="bg-linear-to-r from-blue-950 to-blue-800 w-10/12 lg:w-3/4 h-20 mt-2 mb-3 rounded-lg flex items-center 
-            justify-center"
-          >
-            <h1 className="text-3xl text-white">{participants.className}</h1>
-          </div>
+          <PageTitleCard title={participants.className}/>
 
-          <div className="w-10/12 lg:w-3/4 border-b border-gray-600 flex flex-row items-center justify-center text-gray-900">
-            <Link to={`/posts/${classId}`}>
-              <ChevronLeft size={32} strokeWidth={1}/>
-            </Link>
-            <div className="flex flex-1 py-1 items-center justify-center">
-              <h2 className="text-2xl">Participantes</h2>
-            </div>
-            <Link to={`/assignments/${classId}`}>
-              <ChevronRight size={32} strokeWidth={1}/>
-            </Link>
-          </div>
+          <PageNavigationSection 
+            sectionTitle={"Participantes"}
+            leftRoute={`/posts/${classId}`}
+            rightRoute={`/assignments/${classId}`}
+          />
 
           {participants.teacher &&
             <>
@@ -80,7 +72,9 @@ export function Participants(){
                 </p>
               </div>
 
-              <div className="flex flex-row items-center gap-3 px-4 py-3 lg:py-5 rounded-md w-10/12 lg:w-3/4 bg-gray-200 border border-gray-400">
+              <div className="flex flex-row items-center gap-3 px-4 py-3 lg:py-5 rounded-md w-10/12 lg:w-3/4 bg-gray-200 
+                border border-gray-400"
+              >
                 <span className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-400 text-sm font-semibold">
                   {participants.teacher.name?.charAt(0).toUpperCase()}
                 </span>

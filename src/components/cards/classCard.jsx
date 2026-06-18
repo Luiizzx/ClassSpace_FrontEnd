@@ -1,9 +1,9 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { gradientList } from "../../constants/gradient";
+import { getGradient } from "../../constants/gradient";
 export function ClassCard({ name, code, index, onClickFn, isExpanded }){
 
   return(
-    <div className={`bg-linear-to-r ${gradientList[index]} w-full h-16 flex 
+    <div className={`bg-linear-to-r ${getGradient(index)} w-full h-16 flex 
       flex-row rounded-lg hover:scale-[1.01] transition`}
     >
       <div className="bg-inherit w-11/12 h-full flex flex-col justify-center rounded-lg">

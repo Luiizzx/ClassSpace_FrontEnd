@@ -12,19 +12,19 @@ export function AccountOptions({ onNavigate }){
   }
 
   return(
-    <div className="absolute top-16 mr-4 w-36 h-24 rounded-md flex flex-col gap-1 bg-gray-100 pl-1">
+    <div className="absolute top-16 right-4 w-36 h-24 lg:w-50 lg:h-30 rounded-md flex flex-col gap-1 bg-gray-100 pl-1">
       <button 
         onClick={() => onNavigate("/minha-conta")}
-        className="text-gray-600 font-semibold rounded-t-md w-full h-10 text-start pl-1"
+        className="text-gray-600 font-semibold rounded-t-md w-full h-2/5 text-start pl-1"
       >
         Minha conta
       </button>
 
-      <div className="w-30 border border-gray-300" />
+      <div className="w-11/12 border border-gray-300" />
 
       <button 
         onClick={() => onLogout()}
-        className="text-red-600 rounded-b-md w-full h-10 text-start font-semibold pl-1"
+        className="text-red-600 rounded-b-md w-full h-2/5 text-start font-semibold pl-1"
       >
         Sair da conta
       </button>

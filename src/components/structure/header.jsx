@@ -1,14 +1,24 @@
 import { useState } from "react";
 import { Button } from "../buttons/button";
 import { AccountOptions } from "../dialogs/accountOptions";
+import { GraduationCap, Menu } from "lucide-react";
 
-export function Header({ user, loading, onNavigate }){
+export function Header({ user, loading, onNavigate, setOpen }){
   const [dialog, setDialog] = useState(false)
 
   return(
-    <header className="bg-blue-600 h-20 w-full sticky flex flex-row">
-      <div className="bg-inherit w-2/5 h-full flex items-center justify-start">
-        <h1 className="bg-clip-text text-transparent bg-linear-to-r from-white to-gray-200 font-semibold text-xl sm:text-2xl ml-4">
+    <header className="bg-blue-600 h-28 w-full sticky flex flex-row">
+
+      <div className="bg-inherit w-2/5 h-full flex flex-row gap-4 items-center justify-start text-white pl-4">
+        <button
+          onClick={() => setOpen(true)}
+          className="flex lg:hidden text-white"
+        >
+          <Menu size={46}/>
+        </button>
+
+        <GraduationCap size={56} className="hidden lg:flex"/>
+        <h1 className="font-semibold text-3xl hidden lg:flex">
           ClassSpace
         </h1>
       </div>

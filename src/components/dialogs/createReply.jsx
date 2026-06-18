@@ -1,19 +1,27 @@
+import toast from "react-hot-toast";
+import { fetchBuilder } from "../../services/fetchBuilder";
 import { useState } from "react";
 import { X } from "lucide-react";
-import { fetchBuilder } from "../../services/fetchBuilder";
 
-export function CreatePost({ userId, userName, classId, setPosts, setOpen }) {
-  const [post, setPost] = useState("");
+export function CreateReply({ userId, userName, classId, postId, setPost, setOpen }){
+  const [reply, setReply] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function createNewPost() {
+  async function createNewReply() {
     setLoading(true);
 
-    await fetchBuilder("POST", `/post/createPost/${classId}`, { userId, text: post });
+    const result = await fetchBuilder("POST", `/post/replyPost/${classId}/${postId}`, { userId, text: reply });
 
-    const newPost = { name: userName, text: post, createdAt: new Date() };
-    setPosts(prev => ({ ...prev, posts: [...prev.posts, newPost] }));
+    if(!result.ok){
+      toast.error("Erro ao tentar criar resposta");
 
+      setLoading(false);
+      return;
+    }
+      
+    const newReply = { name: userName, text: reply, submittedAt: new Date() };
+    setPost(prev => ({ ...prev, replies: [...prev.replies, newReply] }));
+    
     setLoading(false);
     setOpen(false);
   }
@@ -23,7 +31,7 @@ export function CreatePost({ userId, userName, classId, setPosts, setOpen }) {
       <div className="bg-white rounded-xl w-[90%] max-w-sm overflow-hidden border border-gray-200">
 
         <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200">
-          <p className="text-base font-medium text-gray-800">Nova postagem</p>
+          <p className="text-base font-medium text-gray-800">Adicionar resposta</p>
           <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
             <X size={20} />
           </button>
@@ -31,9 +39,9 @@ export function CreatePost({ userId, userName, classId, setPosts, setOpen }) {
 
         <div className="px-5 py-4">
           <textarea
-            value={post}
-            onChange={(e) => setPost(e.target.value)}
-            placeholder="Escreva algo para a turma..."
+            value={reply}
+            onChange={(e) => setReply(e.target.value)}
+            placeholder="Escreva uma resposta..."
             rows={5}
             className="w-full resize-none text-sm text-gray-800 placeholder-gray-400 focus:outline-none"
           />
@@ -47,12 +55,12 @@ export function CreatePost({ userId, userName, classId, setPosts, setOpen }) {
             Cancelar
           </button>
           <button
-            onClick={createNewPost}
-            disabled={post.length < 10 || loading}
+            onClick={createNewReply}
+            disabled={reply.length < 10 || loading}
             className="px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-40 
               disabled:cursor-not-allowed transition-colors"
           >
-            Publicar
+            Confirmar
           </button>
         </div>
       </div>

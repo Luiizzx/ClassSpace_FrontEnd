@@ -6,8 +6,8 @@ export function PostCard({ data, classId, postId }){
   const formattedText = data.text.length > 40 ? data.text.slice(0,40) + "..." : data.text;
 
   return(
-    <div className="flex flex-col rounded-md w-10/12 lg:w-1/2 border border-gray-400">
-      <div className="flex flex-col items-start justify-start w-full pl-2 py-3 border-b border-gray-400">
+    <div className="flex flex-col rounded-md w-full border border-gray-400">
+      <div className="flex flex-col items-start justify-start w-full pl-2 py-2 border-b border-gray-400">
         <span className="text-gray-800 font-medium md:text-lg">
           Postagem de <span className="text-gray-900">{data.user.name}</span>
         </span>

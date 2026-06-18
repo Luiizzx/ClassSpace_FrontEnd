@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { fetchBuilder } from "../../services/fetchBuilder";
 import { X } from "lucide-react";
+import toast from "react-hot-toast";
 
 export function AddClass({ studentId, loading, setLoading, setClasses, setOpen }) {
   const [code, setCode] = useState("");
@@ -8,24 +9,16 @@ export function AddClass({ studentId, loading, setLoading, setClasses, setOpen }
   async function addNewClass(){
     setLoading(true);
     
-    try{
-      const result = await fetchBuilder("POST", "/enrollment/create", { studentId, code });
-      
+    const result = await fetchBuilder("POST", "/enrollment/create", { studentId, code });
+    const data = await result.json();
 
-      if(result.ok){
-        const data = await result.json();
-        console.log(data);
-        
-        setClasses(prev => ([ ...prev, data.data ]));
-      }
+    if(result.ok){
+      setClasses(prev => ([ ...prev, data.data ]));
     }
-    catch(error){
-      console.log(error.message);
-    }
-    finally{
-      setOpen(prev => ({ ...prev, add: false }));
-      setLoading(false);
-    }
+    else{ toast.error(data.message); }
+
+    setOpen(prev => ({ ...prev, add: false }));
+    setLoading(false);
   }
 
   return (
