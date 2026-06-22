@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { ChevronLeft, ChevronRight, Loader2, Plus } from "lucide-react";
 import { useAuth } from "../../features/auth/AuthContext";
 import { fetchBuilder } from "../../services/fetchBuilder";
-import { ChevronLeft, ChevronRight, Loader2, Plus } from "lucide-react";
 import { CreatePost } from "../../components/dialogs/createPost";
 import { PostCard } from "../../components/cards/postCard";
-import toast from "react-hot-toast";
 import { NoContentWarning } from "../../components/noContentWarning";
 import { PageTitleCard } from "../../components/cards/pageTitleCard";
 import { PageNavigationSection } from "../../components/pageNavigationSection";
+import { CircularActionButton } from "../../components/buttons/circularActionButton";
 
 export function PostsList(){
   const{ user, loading: loadingUser } = useAuth();
@@ -24,25 +25,31 @@ export function PostsList(){
     async function loadPosts(){
       setLoading(true);
 
-      const result = await fetchBuilder("GET", `/post/getPosts/${classId}`);
-      const data = await result.json();
+      try {
+        const result = await fetchBuilder("GET", `/post/getPosts/${classId}`);
+        const data = await result.json();
 
-      if(result.ok){
-        setPostsList({ className: data.className, posts: data.posts});
+        if(!result.ok){
+          toast.error(data.message || "Erro ao solicitar postagens");
+          return;
+        }
+
+        setPostsList({ className: data.className, posts: data.posts });
+      } catch (err) {
+        console.error(err);
+        toast.error("Erro ao solicitar postagens");
+      } finally {
+        setLoading(false);
       }
-      else{
-        toast.error(data.message);
-      }
-      setLoading(false);
     }
 
     loadPosts();
-  }, []);
+  }, [classId]);
 
   const classNotFound = !loading && postsList.className === "";
 
   return(
-    <div className="w-full h-full flex flex-col items-center">
+    <div className="w-full min-h-full flex flex-col items-center">
       {open &&
         <CreatePost 
           userId={user.id}
@@ -77,7 +84,7 @@ export function PostsList(){
             />
 
             {postsList.posts.length > 0 ? 
-              <div className="flex flex-col gap-2 items-center justify-center w-10/12 lg:w-3/4 mt-4">
+              <div className="flex flex-col gap-2 items-center justify-center w-10/12 lg:w-3/4 mt-4 pb-4">
                 {postsList.posts.map((post, index) => (
                   <PostCard 
                     key={index}
@@ -88,22 +95,16 @@ export function PostsList(){
                 ))}
               </div>
               :
-              <div className="flex flex-1 flex-col gap-1 items-center justify-center text-center text-lg text-gray-700 font-semibold">
-                <p>Sem postagens até o momento.</p>
-                <p>Faça uma postagem para se comunicar com seus colegas!</p>
-              </div>
+              <NoContentWarning 
+                title={"Sem postagens até o momento."}
+                subText={"Faça uma postagem para se comunicar com seus colegas!"}
+              />
             }
           </>
         )
       }
       {!classNotFound &&
-        <button
-          onClick={() => setOpen(true)}
-          className="absolute bottom-10 right-4 flex items-center justify-center w-14 h-14 rounded-full border border-blue-700
-            hover:scale-105 hover:cursor-pointer"
-        >
-          <Plus size={32} className="text-blue-700" />
-        </button>
+        <CircularActionButton onClick={() => setOpen(true)} tooltip={"Criar nova postagem"} />
       }
     </div>
   );

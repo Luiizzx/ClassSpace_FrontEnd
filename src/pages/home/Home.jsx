@@ -78,7 +78,7 @@ export function Home() {
       setLoading(false);
     }
     loadClasses();
-  }, []);
+  }, [user]);
 
   const filteredClasses = search.active && search.text
     ? classes.filter((classData) =>
@@ -94,9 +94,8 @@ export function Home() {
       {openForm.create &&
         <CreateClass 
           teacherId={user.id}
-          loading={loading}
+          classes={classes}
           setClasses={setClasses}
-          setLoading={setLoading}
           setOpen={setOpenForm}
         />
       }
@@ -104,15 +103,13 @@ export function Home() {
       {openForm.add &&
         <AddClass 
           studentId={user.id}
-          loading={loading}
           setClasses={setClasses}
-          setLoading={setLoading}
           setOpen={setOpenForm}
         />
       }
 
       {classes.length > 0 && !loading ? (
-        <div className="bg-gray-200 flex flex-1 flex-col items-center gap-6">
+        <div className="flex flex-1 flex-col items-center gap-6">
           <div className="bg-linear-to-r from-blue-950 to-blue-800 w-11/12 lg:w-3/4 h-22 rounded-lg flex flex-row justify-center mt-6">
 
             <div className="bg-inherit w-11/12 h-full flex items-center">
@@ -129,14 +126,14 @@ export function Home() {
             <div className="h-full flex flex-row">
               <button
                 onClick={onClickFn}
-                className="h-full w-full flex items-center justify-end"
+                className="h-full w-full flex items-center justify-end hover:cursor-pointer"
               >
                 {search.active ? <RefreshCcw size={28} className="text-white mr-2" /> : <Plus size={28} className="text-white mr-2" />}
               </button>
 
               <button
                 onClick={triggerSearch}
-                className="h-full w-full flex items-center justify-end"
+                className="h-full w-full flex items-center justify-end hover:cursor-pointer"
               >
                 {search.active ? <X size={28} className="text-white mr-2" /> : <Search size={28} className="text-white mr-2" />}
               </button>

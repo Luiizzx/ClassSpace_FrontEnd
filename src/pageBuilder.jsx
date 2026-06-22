@@ -1,12 +1,11 @@
-import { Header } from "./components/structure/header";
-import { Button } from "./components/buttons/button";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { BookPlusIcon, House, Loader2} from "lucide-react";
-import { useAuth } from "./features/auth/AuthContext";
-import { Sidebar } from "./components/structure/sideBar";
-import { useEffect, useState } from "react";
-import { fetchBuilder } from "./services/fetchBuilder";
 import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { BookPlusIcon, House, Loader2} from "lucide-react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Header } from "./components/layout/header";
+import { useAuth } from "./features/auth/AuthContext";
+import { Sidebar } from "./components/layout/sideBar";
+import { fetchBuilder } from "./services/fetchBuilder";
 
 export function PageBuilder(){
   const { user, loading: loadingUser } = useAuth();
@@ -29,17 +28,25 @@ export function PageBuilder(){
     async function loadClasses(){
       setLoading(true);
 
-      const response = await fetchBuilder("GET", `/class/getAll/${user.id}`);
-      const data = await response.json();
+      try{
+        const response = await fetchBuilder("GET", `/class/getAll/${user.id}`);
+        
+        if(!response.ok){
+          toast.error("Erro ao tentar carregar turmas");
 
-      if(response.ok){
+          setLoading(false);
+          return;
+        }
+
+        const data = await response.json();
         setClasses(data);
       }
-      else{
-        toast.error(data.message);
+      catch{
+        toast.error("Erro ao tentar carregar turmas");
       }
-
-      setLoading(false);
+      finally{
+        setLoading(false);
+      }
     }
     loadClasses();
   }, []);
@@ -60,7 +67,7 @@ export function PageBuilder(){
             <div className="flex flex-row w-full h-full overflow-hidden">
               <Sidebar open={open} setOpen={setOpen} classes={classes} />
 
-              <main className="bg-gray-200 flex-1 overflow-y-auto">
+              <main className="bg-gray-100 flex-1 overflow-y-auto">
                 <Outlet />
               </main>
             </div>

@@ -27,7 +27,7 @@ export function CreateReply({ userId, userName, classId, postId, setPost, setOpe
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-40 backdrop-blur-sm">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 backdrop-blur-sm">
       <div className="bg-white rounded-xl w-[90%] max-w-sm overflow-hidden border border-gray-200">
 
         <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200">

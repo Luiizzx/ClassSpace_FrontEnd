@@ -9,25 +9,34 @@ export function CreatePost({ userId, userName, classId, setPosts, setOpen }) {
 
   async function createNewPost() {
     setLoading(true);
+    try{
+      const result = await fetchBuilder("POST", `/post/createPost/${classId}`, { userId, text: post });
 
-    const result = await fetchBuilder("POST", `/post/createPost/${classId}`, { userId, text: post });
+      if(!result.ok){
+        toast.error("Erro ao tentar criar postagem");
 
-    if(!result.ok){
-      toast.error("Erro ao tentar criar postagem");
-
-      setLoading(false);
-      return;
-    }
-      
-    const newPost = { name: userName, text: post, createdAt: new Date() };
-    setPosts(prev => ({ ...prev, posts: [...prev.posts, newPost] }));
+        setLoading(false);
+        return;
+      }
     
-    setLoading(false);
-    setOpen(false);
+      const data = await result.json();
+      const newPost = { user: { name: userName }, id: data.id,text: post, createdAt: new Date() };
+
+      setPosts(prev => ({ ...prev, posts: [...prev.posts, newPost] }));
+      setOpen(false);
+
+      toast.success("Postagem criada com sucesso");
+    }
+    catch(error){
+      toast.error("Erro ao tentar criar postagem");
+    }
+    finally{
+      setLoading(false);
+    }
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-40 backdrop-blur-sm">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 backdrop-blur-sm">
       <div className="bg-white rounded-xl w-[90%] max-w-sm overflow-hidden border border-gray-200">
 
         <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200">

@@ -70,20 +70,20 @@ export function Post(){
           <div className="flex flex-col items-center w-full">
             <PageTitleCard title={`Postagem de ${post.user.name}`} backTo={`/posts/${classId}`}/>
 
-            <div className="flex flex-col rounded-md w-10/12 lg:w-3/4 border border-gray-400">
-              <div className="flex flex-col items-start justify-start w-full pl-2 py-2 border-b border-gray-400">
+            <div className="flex flex-col rounded-md w-10/12 lg:w-3/4 border border-gray-400 shadow-lg">
+              <div className="flex flex-col items-start justify-start w-full pl-2 py-2 border-b border-gray-400 bg-gray-200 rounded-t-md">
                 <span className="text-gray-900">{post.user.name}</span>
                 <p className="text-xs md:text-base font-medium text-gray-800">Em {formatDate(post.content.createdAt)}</p>
               </div>
 
-              <div className="flex items-center justify-start w-full pl-2 py-4 bg-gray-200">
+              <div className="flex items-center justify-start w-full pl-2 py-4">
                 <p className="text-sm md:text-lg text-gray-900 font-medium">{post.content.text}</p>
               </div>
 
               <div className="flex items-center py-2 pr-2 justify-end w-full border-t border-gray-400 rounded-b-md">
                 <button 
                   onClick={() => setOpen(true)}
-                  className="text-sm md:text-base text-blue-700 font-medium py-1 px-2 rounded-xl bg-blue-300"
+                  className="text-sm md:text-base text-blue-700 font-medium py-1 px-2 rounded-xl bg-blue-300 hover:cursor-pointer"
                 >
                   Responder
                 </button>

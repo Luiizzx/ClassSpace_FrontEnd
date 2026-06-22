@@ -47,7 +47,7 @@ export function Participants(){
   const classNotFound = !loading && participants.className === "";
   
   return (
-    <div className="w-full h-full flex flex-col items-center">
+    <div className="w-full min-h-full flex flex-col items-center">
 
       {classNotFound ? (
         <NoContentWarning 

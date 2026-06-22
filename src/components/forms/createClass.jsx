@@ -1,39 +1,44 @@
 import { X } from "lucide-react";
 import { useState } from "react";
 import { fetchBuilder } from "../../services/fetchBuilder";
+import toast from "react-hot-toast";
 
-export function CreateClass({ loading, teacherId, setLoading, setClasses, setOpen }) {
+export function CreateClass({ teacherId, setClasses, setOpen }) {
   const [form, setForm] = useState({ teacherId: teacherId, name: "", code: "", post: "" });
+  
+  const [loading, setLoading] = useState(false);
 
-    async function createNewClass(){
+  async function createNewClass(){
     setLoading(true);
 
-    try{
-      // deve receber de volta o ID da turma criada pra criar postagem
-      const result = await fetchBuilder("POST", "/class/create", form); 
+    const result = await fetchBuilder("POST", "/class/create", form); 
+    const data = await result.json();
 
-      if(result.ok){
-        setClasses(prev => [...prev, form]);
-      }
-    }
-    catch(error){
-      console.log(error);
-    }
-    finally{
+    if(result.status !== 201){
+      toast.error(data.message);
       setLoading(false);
-      setOpen(prev => ({ ...prev, create: false }));
+
+      return;
     }
+
+    setClasses(prev => [...prev, data]);
+    
+    setOpen(prev => ({ ...prev, create: false }));
+    setLoading(false);
+
+    toast.success("Turma criada com sucesso!");
   }
 
-  const canCreate = !loading && form.name.length >= 8 && form.code.length >= 4;
+  const canCreate = !loading && form.name.length >= 4 && form.code.length >= 2;
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-40 backdrop-blur-sm">
+    <form className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 backdrop-blur-sm">
       <div className="bg-white rounded-xl w-[90%] max-w-sm overflow-hidden border border-gray-200">
 
         <div className="flex items-center justify-between px-5 py-3 border-b border-gray-200">
           <p className="text-base font-medium text-gray-800">Nova turma</p>
-          <button onClick={() => setOpen(prev => ({ ...prev, create: false }))} className="text-gray-800">
+
+          <button onClick={() => setOpen(prev => ({ ...prev, create: false }))} className="text-gray-800 hover:cursor-pointer">
             <X />
           </button>
         </div>
@@ -45,7 +50,6 @@ export function CreateClass({ loading, teacherId, setLoading, setClasses, setOpe
             <input
               onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
               value={form.name}
-              minLength={8}
               maxLength={30}
               className="w-full h-10 px-3 rounded-lg border border-gray-300 bg-gray-50 text-sm focus:outline-none 
                 focus:ring-2 focus:ring-blue-500"
@@ -56,7 +60,7 @@ export function CreateClass({ loading, teacherId, setLoading, setClasses, setOpe
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-gray-600">Código da turma</label>
             <input
-              onChange={(e) => setForm(prev => ({ ...prev, code: e.target.value }))}
+              onChange={(e) => setForm(prev => ({ ...prev, code: e.target.value.toUpperCase() }))}
               value={form.code}
               minLength={4}
               maxLength={10}
@@ -101,6 +105,6 @@ export function CreateClass({ loading, teacherId, setLoading, setClasses, setOpe
           </button>
         </div>
       </div>
-    </div>
+    </form>
   );
 }

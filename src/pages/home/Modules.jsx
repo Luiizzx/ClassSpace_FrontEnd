@@ -15,7 +15,7 @@ export function Modules({ classId }){
 
       <ModuleCard 
         moduleName={"Atividades"} 
-        route={`/posts/${classId}`}
+        route={`/assignments/${classId}`}
       />
     </div>
   )

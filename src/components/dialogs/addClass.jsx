@@ -3,8 +3,9 @@ import { fetchBuilder } from "../../services/fetchBuilder";
 import { X } from "lucide-react";
 import toast from "react-hot-toast";
 
-export function AddClass({ studentId, loading, setLoading, setClasses, setOpen }) {
+export function AddClass({ studentId, setClasses, setOpen }) {
   const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function addNewClass(){
     setLoading(true);
