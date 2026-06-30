@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight, TriangleAlert } from "lucide-react";
 import toast from "react-hot-toast";
 import { NoContentWarning } from "../../components/noContentWarning";
 import { PageTitleCard } from "../../components/cards/pageTitleCard";
-import { PageNavigationSection } from "../../components/pageNavigationSection";
+import { PageNavigationSection } from "../../components/layout/pageNavigationSection";
 
 export function Participants(){
   const { user, loading: loadingUser } = useAuth();
@@ -47,7 +47,7 @@ export function Participants(){
   const classNotFound = !loading && participants.className === "";
   
   return (
-    <div className="w-full min-h-full flex flex-col items-center">
+    <div className="w-10/12 lg:w-3/4 min-h-full flex flex-col items-center">
 
       {classNotFound ? (
         <NoContentWarning 
@@ -58,7 +58,7 @@ export function Participants(){
         <>
           <PageTitleCard title={participants.className}/>
 
-          <PageNavigationSection 
+          <PageNavigationSection
             sectionTitle={"Participantes"}
             leftRoute={`/posts/${classId}`}
             rightRoute={`/assignments/${classId}`}
@@ -66,13 +66,13 @@ export function Participants(){
 
           {participants.teacher &&
             <>
-              <div className="flex items-center justify-start w-10/12 lg:w-3/4">
+              <div className="flex items-center justify-start w-full">
                 <p className="mt-3 text-lg font-medium text-gray-900">
                   Professor
                 </p>
               </div>
 
-              <div className="flex flex-row items-center gap-3 px-4 py-3 lg:py-5 rounded-md w-10/12 lg:w-3/4 bg-gray-200 
+              <div className="flex flex-row items-center gap-3 px-4 py-3 lg:py-5 rounded-md w-full bg-gray-200 
                 border border-gray-400"
               >
                 <span className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-400 text-sm font-semibold">
@@ -97,13 +97,13 @@ export function Participants(){
 
           {participants.students.length > 0 && !loading ? (
             <>
-              <div className="flex items-center justify-start w-10/12 lg:w-3/4">
+              <div className="flex items-center justify-start w-full">
                 <p className="mt-3 text-lg font-medium text-gray-900">
                   Alunos ({participants.students.length})
                 </p>
               </div>
 
-              <ul className="w-10/12 lg:w-3/4 flex flex-col gap-2">
+              <ul className="w-full flex flex-col gap-2">
                 {participants.students.map((student, index) => (
                   <li
                     key={index}

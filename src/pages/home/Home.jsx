@@ -140,10 +140,6 @@ export function Home() {
             </div>
           </div>
 
-          <div className="w-11/12 lg:w-3/4 border-b-2 border-gray-400 flex justify-end">
-            <p className="text-gray-800 text-lg">2026</p>
-          </div>
-
           <div className="w-11/12 lg:w-3/4 flex flex-col items-center gap-4 pb-4">
             {filteredClasses.length > 0 ? (
               filteredClasses.map((classData, index) => (
@@ -155,11 +151,11 @@ export function Home() {
                     index={index}
                     name={classData.name}
                     code={classData.code}
-                    onClickFn={() => onClickDisplay(classData.key)}
-                    isExpanded={display === classData.key}
+                    onClickFn={() => onClickDisplay(classData.id)}
+                    isExpanded={display === classData.id}
                   />
 
-                  {display === classData.key && <Modules classId={classData.id} />}
+                  {display === classData.id && <Modules classId={classData.id} />}
                 </div>
               ))
             ) : (

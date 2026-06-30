@@ -12,8 +12,9 @@ export function Sidebar({ classes, open, setOpen }){
   const [active, setActive] = useState(true); //desativar logout após um clique
 
   async function onLogout(){
+    setActive(false);
     try{
-      const result = await fetchBuilder("POST", "auth/logout");
+      const result = await fetchBuilder("POST", "/auth/logout");
 
       if(!result.ok){
         toast.error("Erro. Tente novamente.");
@@ -24,7 +25,7 @@ export function Sidebar({ classes, open, setOpen }){
 
       navigate("/login");
     }
-    catch(error){
+    catch{
       toast.error("Um erro inesperado ocorreu");
     }
   }
@@ -37,7 +38,7 @@ export function Sidebar({ classes, open, setOpen }){
           onClick={() => setOpen(false)}
         />
       )}
-      <nav className={`flex flex-col gap-2 justify-start w-[70%] lg:w-[30%] xl:w-[25%] h-full bg-gray-100 border-r 
+      <nav className={`flex flex-col gap-2 justify-start w-[70%] md:w-[55%] lg:w-[30%] xl:w-[25%] h-full bg-gray-100 border-r 
         lg:border-r-2 border-gray-400
         fixed lg:static top-0 left-0 z-50
         transition-transform duration-300 ease-in-out

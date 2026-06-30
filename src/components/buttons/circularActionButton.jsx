@@ -2,10 +2,11 @@ import { Plus } from "lucide-react";
 
 export function CircularActionButton({ onClick, tooltip }){
   return(
-    <div className="absolute group bottom-4 right-4">
+    <div className="absolute group bottom-4 right-1 lg:right-4 rounded-full">
       <button
         onClick={onClick}
-        className="flex items-center justify-center w-14 h-14 rounded-full border border-blue-700 hover:cursor-pointer"
+        className="flex items-center justify-center w-12 h-12 lg:w-14 lg:h-14 rounded-full bg-white border border-blue-700 
+          hover:cursor-pointer"
       >
         <Plus size={32} className="text-blue-700" />
       </button>

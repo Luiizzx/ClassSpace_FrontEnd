@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../../features/auth/AuthContext";
-import { Loader2, Plus } from "lucide-react";
-import { PageTitleCard } from "../../components/cards/pageTitleCard";
-import { PageNavigationSection } from "../../components/pageNavigationSection";
-import { useParams } from "react-router-dom";
-import { fetchBuilder } from "../../services/fetchBuilder";
 import toast from "react-hot-toast";
-import { NoContentWarning } from "../../components/noContentWarning";
+import { useEffect, useState } from "react";
+import { Loader2, Plus } from "lucide-react";
+import { useParams } from "react-router-dom";
 import { roles } from "../../constants/roles";
+import { useAuth } from "../../features/auth/AuthContext";
+import { PageTitleCard } from "../../components/cards/pageTitleCard";
+import { PageNavigationSection } from "../../components/layout/pageNavigationSection";
+import { NoContentWarning } from "../../components/noContentWarning";
+import { fetchBuilder } from "../../services/fetchBuilder";
 import { CircularActionButton } from "../../components/buttons/circularActionButton";
 import { CreateAssignment } from "../../components/forms/createAssignment";
 import { AssignmentCard } from "../../components/cards/assignmentCard";
@@ -49,10 +49,11 @@ export function AssignmentsList(){
   const classNotFound = !loading && assignmentsList.className === "";
 
   return(
-    <div className="w-full min-h-full flex flex-col items-center">
+    <div className="w-10/12 lg:w-3/4 min-h-full flex flex-col items-center">
       
       {open &&
         <CreateAssignment 
+          userId={user.id}
           classId={classId}
           setOpen={setOpen}
           setAssignments={setAssignmentsList}
@@ -96,11 +97,12 @@ export function AssignmentsList(){
                 </section>
 
               ) : (
-                <div className="w-10/12 lg:w-3/4 h-full gap-4 mt-4 flex flex-col items-center">
+                <div className="w-full h-full gap-4 mt-4 flex flex-col items-center">
                   {assignmentsList.assignments.map((assignment, index) => (
                     <AssignmentCard 
                       key={index}
                       data={assignment}
+                      classId={classId}
                     />
                   ))}
                 </div>
@@ -109,7 +111,7 @@ export function AssignmentsList(){
           </>
         )   
       }
-      {!classNotFound &&
+      {!classNotFound && user.role == roles.TEACHER &&
         <CircularActionButton 
           onClick={() => setOpen(true)} 
           tooltip={"Criar nova tarefa"} 

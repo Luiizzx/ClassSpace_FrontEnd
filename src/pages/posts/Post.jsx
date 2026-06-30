@@ -40,7 +40,7 @@ export function Post(){
   const postNotFound = !loading && !post.user;
 
   return(
-    <div className="w-full h-full flex flex-col items-center">
+    <div className="w-10/12 lg:w-3/4 min-h-full flex flex-col items-center">
       {open &&
         <CreateReply
           userId={user.id}
@@ -54,23 +54,25 @@ export function Post(){
 
       {loading && !post.user ? 
         (
-          <div className="flex items-center justify-center min-h-screen">
+          <div className="flex flex-1 items-center justify-center">
             <Loader2 size={256} strokeWidth={1} className="animate-spin text-blue-600" />
           </div>
         )
         : postNotFound ?
         (
-          <NoContentWarning 
-            title={"Postagem não encontrada"}
-            subText={"Não existe postagem com esse ID."}
-          />
+          <section className="flex flex-1 items-center justify-center">
+            <NoContentWarning 
+              title={"Postagem não encontrada"}
+              subText={"Não existe postagem com esse ID."}
+            />
+          </section>
         )
         :
         (
           <div className="flex flex-col items-center w-full">
-            <PageTitleCard title={`Postagem de ${post.user.name}`} backTo={`/posts/${classId}`}/>
+            <PageTitleCard title="Postagem" backTo={`/posts/${classId}`}/>
 
-            <div className="flex flex-col rounded-md w-10/12 lg:w-3/4 border border-gray-400 shadow-lg">
+            <div className="flex flex-col rounded-md w-full border border-gray-400 shadow-lg mt-2">
               <div className="flex flex-col items-start justify-start w-full pl-2 py-2 border-b border-gray-400 bg-gray-200 rounded-t-md">
                 <span className="text-gray-900">{post.user.name}</span>
                 <p className="text-xs md:text-base font-medium text-gray-800">Em {formatDate(post.content.createdAt)}</p>
@@ -90,7 +92,7 @@ export function Post(){
               </div>
             </div>
 
-            <div className="flex items-center justify-start w-10/12 lg:w-3/4 border-b border-gray-900 mt-2">
+            <div className="flex items-center justify-start w-full border-b border-gray-900 mt-2">
               {post.replies.length > 0 &&
                 <p className="text-gray-900 font-medium">Respostas ({post.replies.length})</p>
               }
@@ -98,9 +100,9 @@ export function Post(){
 
             {post.replies.length == 0 ? 
               (
-                <div>
-
-                </div>
+                <p className="text-gray-600 mt-2">
+                  Sem respostas até o momento
+                </p>
               )
               :
               (

@@ -67,7 +67,7 @@ export function PageBuilder(){
             <div className="flex flex-row w-full h-full overflow-hidden">
               <Sidebar open={open} setOpen={setOpen} classes={classes} />
 
-              <main className="bg-gray-100 flex-1 overflow-y-auto">
+              <main className="bg-gray-100 flex flex-1 overflow-y-auto justify-center">
                 <Outlet />
               </main>
             </div>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export function PageNavigationSection({ sectionTitle, leftRoute, rightRoute }){
   return(
-    <div className="w-10/12 lg:w-3/4 border-b border-gray-600 flex flex-row items-center justify-center text-gray-900">
+    <div className="w-full border-b border-gray-600 flex flex-row items-center justify-center text-gray-900 font-medium mt-2">
       <Link to={leftRoute}>
         <ChevronLeft size={32} strokeWidth={1}/>
       </Link>

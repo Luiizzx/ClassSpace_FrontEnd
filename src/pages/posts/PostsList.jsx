@@ -8,7 +8,7 @@ import { CreatePost } from "../../components/dialogs/createPost";
 import { PostCard } from "../../components/cards/postCard";
 import { NoContentWarning } from "../../components/noContentWarning";
 import { PageTitleCard } from "../../components/cards/pageTitleCard";
-import { PageNavigationSection } from "../../components/pageNavigationSection";
+import { PageNavigationSection } from "../../components/layout/pageNavigationSection";
 import { CircularActionButton } from "../../components/buttons/circularActionButton";
 
 export function PostsList(){
@@ -27,15 +27,16 @@ export function PostsList(){
 
       try {
         const result = await fetchBuilder("GET", `/post/getPosts/${classId}`);
-        const data = await result.json();
-
+        
         if(!result.ok){
-          toast.error(data.message || "Erro ao solicitar postagens");
+          toast.error("Erro ao solicitar postagens");
           return;
         }
-
+        
+        const data = await result.json();
         setPostsList({ className: data.className, posts: data.posts });
-      } catch (err) {
+      }
+       catch (err) {
         console.error(err);
         toast.error("Erro ao solicitar postagens");
       } finally {
@@ -49,7 +50,7 @@ export function PostsList(){
   const classNotFound = !loading && postsList.className === "";
 
   return(
-    <div className="w-full min-h-full flex flex-col items-center">
+    <div className="w-10/12 lg:w-3/4 min-h-screen flex flex-col items-center">
       {open &&
         <CreatePost 
           userId={user.id}
@@ -84,7 +85,7 @@ export function PostsList(){
             />
 
             {postsList.posts.length > 0 ? 
-              <div className="flex flex-col gap-2 items-center justify-center w-10/12 lg:w-3/4 mt-4 pb-4">
+              <div className="flex flex-col gap-2 items-center justify-center w-full mt-4 pb-4">
                 {postsList.posts.map((post, index) => (
                   <PostCard 
                     key={index}

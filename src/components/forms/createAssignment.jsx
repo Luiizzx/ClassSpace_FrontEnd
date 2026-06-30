@@ -4,8 +4,10 @@ import toast from "react-hot-toast";
 import { DateField } from "../date/dateField";
 import { fetchBuilder } from "../../services/fetchBuilder";
 import Calendar from "../date/calendar";
+import { uploadFiles } from "../../services/uploadFiles";
+import { formatFileName } from "../../utils/formatName";
 
-export function CreateAssignment({ classId, setAssignments, setOpen }) {
+export function CreateAssignment({ userId, classId, setAssignments, setOpen }) {
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -13,30 +15,62 @@ export function CreateAssignment({ classId, setAssignments, setOpen }) {
     dueDate: null,
   });
 
+  const [files, setFiles] = useState([]);
+
   const [loading, setLoading] = useState(false);
+
+  function onFileSelection(e) {
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
+
+    if (files.length >= 3) {
+      toast.error("Você pode anexar no máximo 2 arquivos.");
+      return;
+    }
+
+    setFiles(prev => [...prev, selectedFile]);
+
+    e.target.value = "";
+  }
+
+  function removeFile(index) {
+    setFiles(prev => prev.filter((_, i) => i !== index));
+  }
 
   async function createNewAssignment() {
     setLoading(true);
+    console.log(files);
     try {
-      
-      const result = await fetchBuilder("POST", `/assignment/createAssignment/${classId}`, { classId, ...form });
+      const uploadedFiles = await uploadFiles(files, userId);
 
-      if (result.status !== 201) {
+      if(!uploadFiles){
         toast.error("Erro ao tentar criar tarefa");
         return;
       }
-      
-      const data = await result.json();
 
+      const result = await fetchBuilder("POST", `/assignment/createAssignment/${classId}`, {
+        userId,
+        classId,
+        ...form,
+        files: uploadedFiles
+      });
+
+      if(!result.ok || result.status !== 201){
+        toast.error("Erro ao tentar criar tarefa");
+        return;
+      }
+
+      const data = await result.json();
       setAssignments(prev => ({ ...prev, assignments: [...prev.assignments, data] }));
+
       toast.success("Tarefa adicionada com sucesso");
+      setOpen(false);
     } 
     catch {
       toast.error("Erro ao tentar criar tarefa");
-    } 
-    finally {
+    }
+    finally{
       setLoading(false);
-      setOpen(false);
     }
   }
 
@@ -115,6 +149,54 @@ export function CreateAssignment({ classId, setAssignments, setOpen }) {
                 onChange={date => setForm(prev => ({ ...prev, dueDate: date }))}
               />
             </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+
+            {files.length > 0 && (
+              <div className="flex flex-row gap-2">
+                {files.map((file, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between rounded-lg bg-gray-200 px-2 py-2"
+                  >
+                    <span className="truncate text-xs">
+                      {formatFileName(file.name)}
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={() => removeFile(index)}
+                      className="text-gray-500 hover:text-red-600"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <label
+              className={`flex items-center justify-center h-10 rounded-lg border text-sm cursor-pointer
+                ${
+                  files.length >= 3
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "border-gray-300 hover:bg-gray-50"
+                }`}
+            >
+              Anexar arquivo
+
+              <input
+                type="file"
+                className="hidden"
+                disabled={files.length >= 3}
+                onChange={onFileSelection}
+              />
+            </label>
+
+            <span className="text-xs text-gray-400">
+              Máximo de 3 arquivos.
+            </span>
           </div>
         </div>
 

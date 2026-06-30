@@ -9,6 +9,7 @@ import { PostsList } from "../pages/posts/PostsList";
 import { Post } from "../pages/posts/Post";
 import { AssignmentsList } from "../pages/assignments/AssignmentsList";
 import { Assignment } from "../pages/assignments/Assignment";
+import { Deliveries } from "../pages/deliveries/Deliveries";
 
 export function Router(){
   return(
@@ -27,6 +28,8 @@ export function Router(){
 
           <Route element={<AssignmentsList />} path="/assignments/:classId"/>
           <Route element={<Assignment />}      path="/assignment/:classId/:assignmentId" />
+
+          <Route element={<Deliveries />}      path="/deliveries/:classId/:assignmentId" />
         </Route>
       </Route>       
     </Routes>      
