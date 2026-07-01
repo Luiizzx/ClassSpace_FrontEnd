@@ -69,6 +69,7 @@ export function AssignmentsList(){
         : classNotFound ?
         (<section className="w-full flex flex-1 items-center justify-center">
             <NoContentWarning 
+              backTo={"/"}
               title={"Turma não encontrada"}
               subText={"Não existe turma com esse ID"}
             />
@@ -89,6 +90,7 @@ export function AssignmentsList(){
               {assignmentsList.assignments.length === 0 ? (
                 <section className="flex flex-1 items-center justify-center">
                   <NoContentWarning 
+                    backTo={"/"}
                     title={"Não há nenhuma tarefa para essa turma"} 
                     subText={user.role == roles.STUDENT ? 
                       "Seu professor ainda não cadastrou nenhuma tarefa" : "Você ainda não cadastrou nenhuma tarefa"

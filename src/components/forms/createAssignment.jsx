@@ -39,7 +39,6 @@ export function CreateAssignment({ userId, classId, setAssignments, setOpen }) {
 
   async function createNewAssignment() {
     setLoading(true);
-    console.log(files);
     try {
       const uploadedFiles = await uploadFiles(files, userId);
 

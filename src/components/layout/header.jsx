@@ -9,7 +9,7 @@ export function Header({ user, loading, onNavigate, setOpen }){
       <div className="bg-inherit w-2/5 h-full flex flex-row gap-4 items-center justify-start text-white pl-4">
         <button
           onClick={() => setOpen(true)}
-          className="flex lg:hidden text-white"
+          className="flex lg:hidden text-white hover:cursor-pointer"
         >
           <Menu className="h-8 w-8 md:h-10 md:w-10"/>
         </button>

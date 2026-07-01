@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { ClassCard } from "../../components/cards/classCard";
-import { Modules } from "./Modules";
 import { Plus, RefreshCcw, Search, X } from "lucide-react";
 import { useAuth } from "../../features/auth/AuthContext";
 import { roles } from "../../constants/roles";
@@ -14,8 +13,6 @@ export function Home() {
 
   const [classes, setClasses] = useState([]);
 
-  const [display, setDisplay] = useState(null);
-
   const [search, setSearch] = useState({
     active: false,
     text: ""
@@ -27,11 +24,6 @@ export function Home() {
   });
 
   const [loading, setLoading] = useState(true);
-  
-  // para exibição de módulos
-  function onClickDisplay(id) {
-    setDisplay((prev) => (prev === id ? null : id));
-  }
 
   // form aberto depende do role do usuário
   function openForms(){
@@ -149,13 +141,8 @@ export function Home() {
                 >
                   <ClassCard
                     index={index}
-                    name={classData.name}
-                    code={classData.code}
-                    onClickFn={() => onClickDisplay(classData.id)}
-                    isExpanded={display === classData.id}
+                    data={classData}
                   />
-
-                  {display === classData.id && <Modules classId={classData.id} />}
                 </div>
               ))
             ) : (

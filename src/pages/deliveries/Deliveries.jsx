@@ -1,21 +1,57 @@
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAuth } from "../../features/auth/AuthContext";
 import { fetchBuilder } from "../../services/fetchBuilder";
 import { File, HardDriveDownload, Loader2 } from "lucide-react";
 import { NoContentWarning } from "../../components/noContentWarning";
 import { PageTitleCard } from "../../components/cards/pageTitleCard";
+import { DeliveredFiles } from "../../components/dialogs/DeliveredFiles";
+import { FilePreview } from "../../components/filePreview/filePreview";
 
 export function Deliveries(){
   const { user, loading: loadingUser } = useAuth();
   const { classId, assignmentId } = useParams();
 
-  const [deliveries, setDeliveries] = useState({ assignmentName: "", list: []});
+  const [deliveries, setDeliveries] = useState({ assignmentName: "", list: [] });
+  const [delivery, setDelivery] = useState({ data: { }, files: [] });
+
   const [loading, setLoading] = useState(true);
 
   // studentId pra fazer fetch dos anexos
-  const [dialog, setDialog] = useState({ open: true, studentId: null });
+  const [open, setOpen] = useState(false);
+  const [preview, setPreview] = useState({ open: true, file: null });
+
+  async function requestDeliveryFiles(id){
+    setDelivery({ data: deliveries.list.find(d => d.id == id), files: [] });
+
+    setOpen(true)
+    setLoading(true);
+
+    try{
+      const result = await fetchBuilder("GET", `/delivery/getDelivery/${id}?userId=${user.id}`);
+
+      if(!result.ok){
+        toast.error("Erro ao tentar recuperar arquivos");
+
+        setLoading(false);
+        return;
+      }
+
+      if(result.status == 204){
+        return;
+      }
+
+      const data = await result.json();
+      setDelivery(prev => ({ ...prev, files: data }));
+    }
+    catch{
+      toast.error("Erro ao tentar recuperar arquivos");
+    }
+    finally{
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     async function loadDeliveries(){
@@ -53,7 +89,27 @@ export function Deliveries(){
   const assignmentNotFound = !loading && !loadingUser && deliveries.assignmentName == "";
 
   return(
-    <div className="w-full min-h-full flex flex-col items-center">
+    <div className="w-10/12 lg:w-3/4 min-h-full flex flex-col items-center">
+      {open &&
+        <DeliveredFiles 
+          classId={classId}
+          userId={user.id}
+          loading={loading}
+          delivery={delivery.data}
+          files={delivery.files}
+          setDeliveries={setDeliveries}
+          setOpen={setOpen}
+          setPreview={setPreview}
+        />
+      }
+
+      {preview.open &&
+        <FilePreview
+          file={preview.file}
+          onClose={() => setPreview({ open: false, file: null })}
+        />
+      }
+
       {loading && !deliveries.assignmentName ?
         (
           <div className="flex flex-1 items-center justify-center">
@@ -64,6 +120,7 @@ export function Deliveries(){
         (
           <section className="w-full flex flex-1 items-center justify-center">
             <NoContentWarning
+              backTo={`/assignment/${classId}/${assignmentId}`}
               title={"Tarefa não encontrada"}
               subText={"Não existe tarefa com esse ID"}
             />
@@ -75,6 +132,7 @@ export function Deliveries(){
             {deliveries.list.length == 0 ? 
               (
                 <NoContentWarning
+                  backTo={`/assignment/${classId}/${assignmentId}`}
                   title={"Nenhuma entrega feita"}
                   subText={"Os alunos ainda não fizeram a entrega dessa atividade"}
                 />
@@ -87,7 +145,7 @@ export function Deliveries(){
                     backTo={`/assignment/${classId}/${assignmentId}`}
                   />
 
-                  <ol className="w-10/12 lg:w-3/4 flex flex-col gap-1">
+                  <ol className="w-full flex flex-col gap-1 mt-4">
                     {deliveries.list.map((delivery, index) => (
                       <li
                         key={index}
@@ -97,12 +155,12 @@ export function Deliveries(){
                           {delivery.student.user.name.charAt(0)}
                         </span>
 
-                        <p>{delivery.student.user.name}</p>
+                        <p className="font-medium">{delivery.student.user.name}</p>
 
                         <span className="flex flex-1 items-center justify-end">
                           <button
-                            onClick={() => setDialog({ open: true, studentId: delivery.student.id })}
-                            className="bg-gray-400 rounded-xl h-9 w-10 flex items-center justify-center"
+                            onClick={() => requestDeliveryFiles(delivery.id)}
+                            className="bg-gray-400 rounded-xl h-9 w-10 flex items-center justify-center hover:cursor-pointer"
                           >
                             <File size={20}/>
                           </button>
@@ -116,7 +174,6 @@ export function Deliveries(){
           </>
         )
       }
-
     </div>
   )
 }

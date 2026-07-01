@@ -51,6 +51,7 @@ export function Participants(){
 
       {classNotFound ? (
         <NoContentWarning 
+          backTo={"/"}
           title={"Turma não encontrada"}
           subText={"Não existe nenhuma turma com este ID."}
         />

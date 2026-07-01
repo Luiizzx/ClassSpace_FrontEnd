@@ -62,6 +62,7 @@ export function Post(){
         (
           <section className="flex flex-1 items-center justify-center">
             <NoContentWarning 
+              backTo={`/posts/${classId}`}
               title={"Postagem não encontrada"}
               subText={"Não existe postagem com esse ID."}
             />

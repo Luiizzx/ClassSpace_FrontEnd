@@ -39,7 +39,9 @@ export function Assignment(){
 
   // para abrir edição de tarefas
   const [open, setOpen] = useState(false);
+
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
 
   // arquivo selecionado para prévia
   const [preview, setPreview] = useState({ open: false, file: null });
@@ -226,12 +228,14 @@ export function Assignment(){
   }
 
   async function deleteAssignment(){
-    setLoading(true);
+    setDeleting(true);
 
     try{
-      const result = await fetchBuilder("DELETE", `/assignment/deleteAssignment/${assignmentId}`, { userId: user.id });
+      const result = await fetchBuilder("DELETE", `/assignment/deleteAssignment/${assignmentId}?userId=${user.id}`);
 
       if(!result.ok ||result.status !== 204){
+        setDeleting(false);
+
         toast.error("Erro ao tentar remover tarefa");
         return;
       }
@@ -242,7 +246,7 @@ export function Assignment(){
       toast.error("Erro ao tentar remover tarefa");
     }
     finally{
-      setLoading(false);
+      setDeleting(false);
     }
   }
 
@@ -306,7 +310,8 @@ export function Assignment(){
     <div className="w-10/12 lg:w-3/4 min-h-full flex flex-col items-center">
       {open &&
         <DeleteAssignment 
-          message={"Tem certeza de que deseja deletar essa tarefa"}
+          message={"Tem certeza de que deseja deletar essa tarefa ?"}
+          deleting={deleting}
           onCancel={() => setOpen(false)}
           onDelete={deleteAssignment}
         />
@@ -329,6 +334,7 @@ export function Assignment(){
         (
           <section className="w-full flex flex-1 items-center justify-center">
             <NoContentWarning
+              backTo={`/assignments/${classId}`}
               title={"Tarefa não encontrada"}
               subText={"Não existe tarefa com esse ID"}
             />

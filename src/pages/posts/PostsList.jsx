@@ -69,6 +69,7 @@ export function PostsList(){
         : classNotFound ?
         (
           <NoContentWarning 
+            backTo={"/"}
             title={"Turma não encontrada"}
             subText={"Não existe turma com esse ID"}
           />
@@ -97,6 +98,7 @@ export function PostsList(){
               </div>
               :
               <NoContentWarning 
+                backTo={"/"}
                 title={"Sem postagens até o momento."}
                 subText={"Faça uma postagem para se comunicar com seus colegas!"}
               />
