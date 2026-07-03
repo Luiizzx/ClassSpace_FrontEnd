@@ -9,6 +9,9 @@ import toast from "react-hot-toast";
 import { CreateReply } from "../../components/dialogs/createReply";
 import { useAuth } from "../../features/auth/AuthContext";
 import { PageTitleCard } from "../../components/cards/pageTitleCard";
+import { formatFileName } from "../../utils/formatName";
+import { downloads } from "../../constants/downloadType";
+import { FilePreview } from "../../components/filePreview/filePreview";
 
 export function Post(){
   const { user, loading: loadingUser} = useAuth();
@@ -17,21 +20,31 @@ export function Post(){
   const [post, setPost] = useState({ content: null, replies: [], user: null });
   const [loading, setLoading] = useState(false);
 
+  const [preview, setPreview] = useState({ open: false, file: null });
   const [open, setOpen] = useState(false);
+
   useEffect(() => {
     
     async function loadPost(){
       setLoading(true);
+      try{
+        const result = await fetchBuilder("GET", `/post/getPost/${classId}/${postId}`);
+        
+        if(result.ok){
+          const data = await result.json();
+          setPost({ content: data.post, replies: data.replies, user: data.user });
 
-      const result = await fetchBuilder("GET", `/post/getPost/${classId}/${postId}`);
-      const data = await result.json();
-
-      if(result.ok){
-        setPost({ content: data.post, replies: data.replies, user: data.user });
+          return;
+        }
+      
+        toast.error("Erro ao carregar postagem"); 
       }
-      else{ toast.error(data.message); }
-
-      setLoading(false);
+      catch{
+        toast.error("Erro ao carregar postagem");
+      }
+      finally{
+        setLoading(false);
+      }
     }
 
     loadPost();
@@ -49,6 +62,14 @@ export function Post(){
           userName={user.name}
           setOpen={setOpen}
           setPost={setPost}
+        />
+      }
+
+      {preview.open &&
+        <FilePreview
+          file={preview.file}
+          type={downloads.POST}
+          onClose={() => setPreview({open: false, file: null })}
         />
       }
 
@@ -79,8 +100,22 @@ export function Post(){
                 <p className="text-xs md:text-base font-medium text-gray-800">Em {formatDate(post.content.createdAt)}</p>
               </div>
 
-              <div className="flex items-center justify-start w-full pl-2 py-4">
+              <div className="flex flex-col gap-2 items-start justify-start w-full pl-2 py-4">
                 <p className="text-sm md:text-lg text-gray-900 font-medium">{post.content.text}</p>
+
+                {post.content.files.length > 0 &&
+                  <div className="flex flex-row items-center gap-2">
+                    {post.content.files.map((file, index) => (
+                      <button 
+                        key={index}
+                        className="rounded-xl px-2 py-1 bg-gray-300 hover:bg-gray-400 hover:cursor-pointer"
+                        onClick={() => setPreview({ open: true, file: file })}
+                      >
+                        {formatFileName(file.fileName)}
+                      </button>
+                    ))}
+                  </div>
+                }
               </div>
 
               <div className="flex items-center py-2 pr-2 justify-end w-full border-t border-gray-400 rounded-b-md">

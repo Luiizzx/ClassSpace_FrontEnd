@@ -15,7 +15,6 @@ export async function uploadFiles(files, userId) {
     });
 
     if (!result.ok) {
-      console.log(result.error.message || result.message);
       toast.error(`Erro ao gerar URL para ${file.name || file.fileName}`);
       return null;
     }

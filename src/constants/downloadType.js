@@ -1,4 +1,5 @@
 export const downloads = {
-  ASSIGNMENT: "assignment",
-  DELIVERY: "delivery"
+  ASSIGNMENT: "ASSIGNMENT",
+  DELIVERY: "DELIVERY",
+  POST: "POST"
 }

@@ -10,6 +10,8 @@ import { NoContentWarning } from "../../components/noContentWarning";
 import { PageTitleCard } from "../../components/cards/pageTitleCard";
 import { PageNavigationSection } from "../../components/layout/pageNavigationSection";
 import { CircularActionButton } from "../../components/buttons/circularActionButton";
+import { FilePreview } from "../../components/filePreview/filePreview";
+import { downloads } from "../../constants/downloadType";
 
 export function PostsList(){
   const{ user, loading: loadingUser } = useAuth();
@@ -19,6 +21,8 @@ export function PostsList(){
   const [postsList, setPostsList] = useState({ className: "", posts: [] });
 
   const [open, setOpen] = useState(false);
+  const [preview, setPreview] = useState({ open: false, file: null });
+
   const [loading, setLoading] = useState(false);
   
   useEffect(() => {
@@ -60,6 +64,14 @@ export function PostsList(){
         />
       }
 
+      {preview.open &&
+        <FilePreview 
+          file={preview.file}
+          type={downloads.POST}
+          onClose={() => setPreview({ open: false, file: null })}
+        />  
+      }
+
       {loading && postsList.className == "" ? 
         (
           <div className="flex items-center justify-center min-h-screen">
@@ -93,6 +105,7 @@ export function PostsList(){
                     data={post}
                     postId={post.id}
                     classId={classId}
+                    setPreview={setPreview}
                   />
                 ))}
               </div>

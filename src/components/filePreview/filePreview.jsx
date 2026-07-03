@@ -1,8 +1,9 @@
 import { Download, ExternalLink, X } from "lucide-react";
 import { FilePreviewRenderer } from "./previewRenderer";
 import { buildFileUrl } from "../../utils/fileUtils";
+import { downloadFile } from "../../services/downloadFile";
 
-export function FilePreview({ file, onClose }) {
+export function FilePreview({ file, onClose, type }) {
   if (!file) return null;
 
   return (
@@ -20,6 +21,7 @@ export function FilePreview({ file, onClose }) {
             </a>
 
             <button
+              onClick={() => downloadFile(file.id, type)}
               className="hover:cursor-pointer"
             >
               <Download strokeWidth={1.5} size={28}/>
@@ -36,7 +38,7 @@ export function FilePreview({ file, onClose }) {
           </span>
         </div>
 
-        <div className="flex-1 overflow-auto p-4">
+        <div className="flex-1 overflow-auto p-4 bg-gray-300 rounded-b-xl">
           <FilePreviewRenderer file={file} />
         </div>
       </div>

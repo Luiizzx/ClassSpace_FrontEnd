@@ -1,7 +1,8 @@
 import { X } from "lucide-react";
 import { formatFileName } from "../utils/formatName";
+import { downloads } from "../constants/downloadType";
 
-export function FileItem({ file, onRemove, delivered, setPreview, isDesktop }){
+export function FileItem({ file, onRemove, delivered, setPreview }){
   return(
     <span
       className="flex flex-row items-center gap-2 py-1.5 pl-1 px-0.5 rounded-xl bg-gray-400 font-medium text-gray-800"
@@ -20,9 +21,9 @@ export function FileItem({ file, onRemove, delivered, setPreview, isDesktop }){
         type="button"
         className="flex flex-1 hover:cursor-pointer"
         disabled={!file.fileKey}
-        onClick={() => setPreview({ open: true, file: file })}
+        onClick={() => setPreview({ open: true, file: file, type: downloads.DELIVERY })}
       >
-        {isDesktop ? (file.fileName || file.name) : formatFileName(file.fileName || file.name)}
+        {formatFileName(file.fileName || file.name)}
       </button>
     </span>
   )

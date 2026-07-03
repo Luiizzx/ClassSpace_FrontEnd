@@ -1,17 +1,7 @@
-import { downloads } from "../constants/downloadType";
-
 export async function downloadFile(fileId, type){
-  let get = "";
-
-  // a diferenciação ocorre porque arquivos de professores e de alunos
-  // estão em tabelas diferentes
-  if (type == downloads.DELIVERY){ get = "getDeliveryFile"; }
-  else{ 
-    get = "getAssignmentFile";
-  }
 
   const response = await fetch(
-    `http://localhost:3001/file/${get}/${fileId}`,
+    `http://localhost:3001/file/getFile/${fileId}?type=${type}`,
     {
       credentials: "include"
     }

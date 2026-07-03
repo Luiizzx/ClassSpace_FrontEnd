@@ -13,6 +13,7 @@ import { FilePreview } from "../../components/filePreview/filePreview";
 import { uploadFiles } from "../../services/uploadFiles";
 import { FileItem } from "../../components/fileItem";
 import DeleteAssignment from "../../components/dialogs/DeleteDialog";
+import { downloads } from "../../constants/downloadType";
 
 export function Assignment(){
   const { user, loading: loadingUser } = useAuth();
@@ -44,9 +45,7 @@ export function Assignment(){
   const [deleting, setDeleting] = useState(false);
 
   // arquivo selecionado para prévia
-  const [preview, setPreview] = useState({ open: false, file: null });
-
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 900);
+  const [preview, setPreview] = useState({ open: false, file: null, type: "" });
 
   // lida com a seleção dos arquivos no PC
   function removeFile(index) {
@@ -146,7 +145,7 @@ export function Assignment(){
       }
 
       // no cancelamento da entrega (ou confirmação sem edição), toAdd e toRemove são ambos
-      // vetores vazios, então só o status muda
+      // vetores vazios, então só o status e data de entrega mudam
       const result = await fetchBuilder(
         "PUT",
         `/delivery/updateDelivery/${assignmentId}`,
@@ -251,13 +250,6 @@ export function Assignment(){
   }
 
   useEffect(() => {
-    const onResize = () => setIsDesktop(window.innerWidth >= 900);
-
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
-  useEffect(() => {
     async function loadAssignment(){
       try{
         let result = await fetchBuilder("GET", `/assignment/getAssignment/${classId}/${assignmentId}`);
@@ -320,6 +312,7 @@ export function Assignment(){
       {preview.open &&
         <FilePreview 
           file={preview.file}
+          type={preview.type}
           onClose={() => setPreview({ open: false, file: null })}
         />
       }
@@ -381,7 +374,7 @@ export function Assignment(){
                   {assignment.info.files.map((file, index) => (
                     <button
                       key={index}
-                      onClick={() => setPreview({ open: true, file: file })}
+                      onClick={() => setPreview({ open: true, file: file, type: downloads.ASSIGNMENT })}
                       className="flex flex-row items-center gap-2 py-2 pl-2 rounded-xl bg-gray-300 font-medium text-gray-800 text-sm"
                     >
                       {formatFileName(file.fileName)}
@@ -401,7 +394,6 @@ export function Assignment(){
                       key={index}
                       file={file}
                       delivered={delivery.info.delivered}
-                      isDesktop={isDesktop}
                       setPreview={setPreview}
                       onRemove={() => removeFile(index)}
                     />
