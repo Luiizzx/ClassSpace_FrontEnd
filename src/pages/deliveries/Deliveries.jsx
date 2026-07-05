@@ -8,12 +8,18 @@ import { NoContentWarning } from "../../components/noContentWarning";
 import { PageTitleCard } from "../../components/cards/pageTitleCard";
 import { DeliveredFiles } from "../../components/dialogs/DeliveredFiles";
 import { FilePreview } from "../../components/filePreview/filePreview";
+import { roles } from "../../constants/roles";
 
 export function Deliveries(){
   const { user, loading: loadingUser } = useAuth();
   const { classId, assignmentId } = useParams();
 
-  const [deliveries, setDeliveries] = useState({ assignmentName: "", list: [] });
+  const [deliveries, setDeliveries] = useState({ 
+    assignmentName: "", 
+    list: [], 
+    studentsWithoutDelivery: [] 
+  });
+
   const [delivery, setDelivery] = useState({ data: { }, files: [] });
 
   const [loading, setLoading] = useState(true);
@@ -67,7 +73,12 @@ export function Deliveries(){
 
         if(result.ok){
           const data = await result.json();
-          setDeliveries({ assignmentName: data.assignmentName, list: data.deliveries });
+
+          setDeliveries({ 
+            assignmentName: data.assignmentName, 
+            list: data.deliveries, 
+            studentsWithoutDelivery: data.studentsWithoutDelivery 
+          });
 
           setLoading(false);
           return;
@@ -144,8 +155,12 @@ export function Deliveries(){
                     title={"Entregas"}
                     backTo={`/assignment/${classId}/${assignmentId}`}
                   />
+                  
+                  <span className="w-full border-b border-gray-800 text-gray-800 font-medium mt-4">
+                    Alunos que entregaram: ({deliveries.list.length})
+                  </span>
 
-                  <ol className="w-full flex flex-col gap-1 mt-4">
+                  <ol className="w-full flex flex-col gap-1 mt-2">
                     {deliveries.list.map((delivery, index) => (
                       <li
                         key={index}
@@ -157,17 +172,41 @@ export function Deliveries(){
 
                         <p className="font-medium">{delivery.student.user.name}</p>
 
-                        <span className="flex flex-1 items-center justify-end">
-                          <button
-                            onClick={() => requestDeliveryFiles(delivery.id)}
-                            className="bg-gray-400 rounded-xl h-9 w-10 flex items-center justify-center hover:cursor-pointer"
-                          >
-                            <File size={20}/>
-                          </button>
-                        </span>
+                        { user.role == roles.TEACHER &&
+                          <span className="flex flex-1 items-center justify-end">
+                            <button
+                              onClick={() => requestDeliveryFiles(delivery.id)}
+                              className="bg-gray-400 rounded-xl h-9 w-10 flex items-center justify-center hover:cursor-pointer"
+                            >
+                              <File size={20}/>
+                            </button>
+                          </span>
+                        }
                       </li>
                     ))}
                   </ol>
+                  
+                  {deliveries.studentsWithoutDelivery.length > 0 &&
+                    <>
+                      <span className="w-full border-b border-gray-800 text-gray-800 font-medium mt-4">
+                        Alunos que não entregaram: ({deliveries.studentsWithoutDelivery.length})
+                      </span>
+
+                      <ol className="w-full flex flex-col gap-1 mt-2">
+                        {deliveries.studentsWithoutDelivery.map((delivery, index) => (
+                          <li
+                            key={index}
+                            className="flex flex-row items-center gap-3 px-2 py-3 lg:py-4 rounded-md bg-gray-200 border border-gray-400" 
+                          >
+                            <span className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-400 text-sm font-semibold">
+                              {delivery.user.name.charAt(0)}
+                            </span>
+                            <p className="font-medium">{delivery.user.name}</p>
+                          </li>
+                        ))}
+                      </ol>
+                    </>
+                  }
                 </section>
               )
             }
