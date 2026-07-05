@@ -56,18 +56,24 @@ export function Home() {
   useEffect(() => {
     async function loadClasses(){
       setLoading(true);
+      try{
+        const response = await fetchBuilder("GET", `/class/getAll/${user.id}`);
 
-      const response = await fetchBuilder("GET", `/class/getAll/${user.id}`);
-      const data = await response.json();
-
-      if(response.ok){
-        setClasses(data);
+        if(response.ok){
+          const data = await response.json();
+          
+          setClasses(data);
+        }
+        else{
+          toast.error("Erro ao tentar carregar turmas");
+        }
       }
-      else{
-        toast.error(data.message);
+      catch{
+        toast.error("Erro ao tentar carregar turmas");
       }
-
-      setLoading(false);
+      finally{
+        setLoading(false);
+      }
     }
     loadClasses();
   }, [user]);
@@ -120,14 +126,22 @@ export function Home() {
                 onClick={onClickFn}
                 className="h-full w-full flex items-center justify-end hover:cursor-pointer"
               >
-                {search.active ? <RefreshCcw size={28} className="text-white mr-2" /> : <Plus size={28} className="text-white mr-2" />}
+                {search.active ? 
+                  <RefreshCcw size={28} className="text-white mr-2" /> : 
+                  user.role !== roles.ADMIN ? 
+                    <Plus size={28} className="text-white mr-2" />
+                    :
+                    <></>
+                }
               </button>
 
               <button
                 onClick={triggerSearch}
                 className="h-full w-full flex items-center justify-end hover:cursor-pointer"
               >
-                {search.active ? <X size={28} className="text-white mr-2" /> : <Search size={28} className="text-white mr-2" />}
+                {search.active ? 
+                  <X size={28} className="text-white mr-2" /> : <Search size={28} className="text-white mr-2" />
+                }
               </button>
             </div>
           </div>
@@ -157,12 +171,17 @@ export function Home() {
         <div className="w-full h-full flex flex-col items-center justify-center gap-2">
           <div className="w-4/5 lg:w-1/2 flex flex-col justify-center text-center">
             <h1 className={`${isLogged ? "text-2xl" : "text-xl"} text-gray-800 font-bold`}>
-              {isLogged ? "Ainda não tem turma?" : "Suas turmas aparecerão aqui após você entrar em sua conta"}
+              {!isLogged
+                ? "Suas turmas aparecerão aqui após você entrar em sua conta"
+                : user.role === roles.ADMIN
+                  ? "Os professores da sua instituição ainda não criaram nenhuma turma."
+                  : "Ainda não tem turma?"
+              }
             </h1>
           </div>
 
           <div className="w-full flex justify-center">
-            {isLogged &&
+            {isLogged && user.role !== roles.ADMIN &&
               <button
                 onClick={openForms}
                 className="w-4/5 sm:w-3/5 md:w-1/2 lg:w-1/3 h-11 bg-gray-800 text-gray-200 flex items-center justify-center 

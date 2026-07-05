@@ -10,12 +10,17 @@ import { Post } from "../pages/posts/Post";
 import { AssignmentsList } from "../pages/assignments/AssignmentsList";
 import { Assignment } from "../pages/assignments/Assignment";
 import { Deliveries } from "../pages/deliveries/Deliveries";
+import { ForgotPassword } from "../pages/forgotPassword/ForgotPassword";
+import { ResetPassword } from "../pages/resetPassword/ResetPassword";
 
 export function Router(){
   return(
     <Routes>
       <Route     element={<Login />}           path="/login" />
       <Route     element={<CreateAccount />}   path="/criar-conta" />
+
+      <Route     element={<ForgotPassword />}  path="/forgot-password" />
+      <Route     element={<ResetPassword />}   path="/reset-password"/>
       
       <Route     element={<ProtectedRoute />} >
         <Route   element={<PageBuilder />} >

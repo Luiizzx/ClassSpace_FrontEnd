@@ -12,6 +12,7 @@ import { PageTitleCard } from "../../components/cards/pageTitleCard";
 import { formatFileName } from "../../utils/formatName";
 import { downloads } from "../../constants/downloadType";
 import { FilePreview } from "../../components/filePreview/filePreview";
+import { roles } from "../../constants/roles";
 
 export function Post(){
   const { user, loading: loadingUser} = useAuth();
@@ -119,12 +120,14 @@ export function Post(){
               </div>
 
               <div className="flex items-center py-2 pr-2 justify-end w-full border-t border-gray-400 rounded-b-md">
-                <button 
-                  onClick={() => setOpen(true)}
-                  className="text-sm md:text-base text-blue-700 font-medium py-1 px-2 rounded-xl bg-blue-300 hover:cursor-pointer"
-                >
-                  Responder
-                </button>
+                {user.role !== roles.ADMIN &&
+                  <button 
+                    onClick={() => setOpen(true)}
+                    className="text-sm md:text-base text-blue-700 font-medium py-1 px-2 rounded-xl bg-blue-300 hover:cursor-pointer"
+                  >
+                    Responder
+                  </button>
+                }
               </div>
             </div>
 

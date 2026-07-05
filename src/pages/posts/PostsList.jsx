@@ -12,6 +12,7 @@ import { PageNavigationSection } from "../../components/layout/pageNavigationSec
 import { CircularActionButton } from "../../components/buttons/circularActionButton";
 import { FilePreview } from "../../components/filePreview/filePreview";
 import { downloads } from "../../constants/downloadType";
+import { roles } from "../../constants/roles";
 
 export function PostsList(){
   const{ user, loading: loadingUser } = useAuth();
@@ -119,7 +120,7 @@ export function PostsList(){
           </>
         )
       }
-      {!classNotFound &&
+      {!classNotFound && user.role !== roles.ADMIN &&
         <CircularActionButton onClick={() => setOpen(true)} tooltip={"Criar nova postagem"} />
       }
     </div>

@@ -402,7 +402,7 @@ export function Assignment(){
               </div>
             }
             <section className={`${totalFiles == 0 ? "flex-1" : ""} flex flex-col w-full gap-2 items-center justify-end mb-4`}>
-              {user.role == roles.TEACHER ?
+              {user.role !== roles.STUDENT ?
                 (
                   <Link
                     to={`/deliveries/${classId}/${assignment.info.id}`}
@@ -432,13 +432,13 @@ export function Assignment(){
               }
 
               <button 
-                disabled={isDisabled || loading}
+                disabled={isDisabled || loading || user.role == roles.ADMIN}
                 onClick={triggetBottomAction}
                 className={`rounded-xl text-white font-medium w-[95%] xl:w-[70%] h-12 lg:h-14 text-xl lg:text-2xl
                   hover:cursor-pointer disabled:bg-gray-800 disabled:cursor-auto
                   ${user.role == roles.TEACHER ? "bg-red-700" : "bg-blue-700"}`}
               >
-                {user.role == roles.TEACHER ? "Deletar atividade" : 
+                {user.role == roles.TEACHER ? "Deletar atividade" : user.role === roles.ADMIN ? "" :
                   delivery.info?.delivered ? "Cancelar envio" : "Confirmar envio"}
               </button>
             </section>

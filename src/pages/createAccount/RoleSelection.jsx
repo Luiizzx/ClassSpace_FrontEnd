@@ -1,78 +1,92 @@
-import { Check, GraduationCap, University } from "lucide-react";
+import { Check, GraduationCap, ShieldUser, University } from "lucide-react";
 import { Link } from "react-router-dom";
 import { roles } from "../../constants/roles";
+import { RoleSelectionButton } from "../../components/buttons/roleSelectionButton";
 export function RoleSelection({ role, setUser, onClickMoveRole }){
+  
+  function roleClick(newRole){
+    if(role == newRole){
+      setUser(prev => ({ ...prev, role: "" }));
+
+      return;
+    }
+
+    setUser(prev => ({ ...prev, role: newRole }));
+  }
 
   return(
-    <div className={`w-11/12 sm:w-4/5 md:w-3/5 h-4/5 sm:h-11/12
-      flex flex-col mt-12 sm:mt-0 rounded-xl gap-8`}
+    <main className={`w-11/12 h-full
+      flex flex-col rounded-xl gap-4 lg:gap-20`}
     >
-      <div className="w-full h-1/6 rounded-t-xl flex flex-col gap-2 pt-12 items-center justify-center">
+      <div className="w-full rounded-t-xl flex flex-col gap-2 pt-6 items-center justify-center">
         <h1 
-          className="bg-clip-text text-transparent bg-linear-to-r from-blue-700 to-blue-500 font-semibold text-4xl"
+          className="bg-clip-text text-transparent bg-linear-to-r from-blue-700 to-blue-600 font-semibold text-4xl md:text-5xl"
         >
           ClassSpace
         </h1>
 
-        <p className="text-gray-700 text-xl font-medium">Você é um...</p>
+        <p className="text-gray-700 text-2xl font-medium">Você é um...</p>
       </div>
 
-      <div className="bg-inherit w-full h-2/5 gap-6 md:gap-0 pt-6 flex flex-row items-center justify-center">
+      <div className="w-full h-2/5 xl:h-[45%] gap-6 md:gap-0 flex flex-row items-center justify-center mt-0 md:mt-8">
+        <div className="w-full h-full ml-2 flex flex-col items-center gap-2">
 
-        <div className="bg-inherit w-1/2 md:w-3/5 h-3/4 lg:h-10/12 ml-2 flex flex-col items-center gap-2">
-          <button
-            onClick={() => setUser(prev => ({ ...prev, role: roles.STUDENT}))} 
-            className={`bg-blue-800 relative w-full sm:w-4/5 xl:w-3/5 h-4/5 rounded-full flex flex-col
-              items-center justify-center transition ${role == roles.STUDENT ? "scale-[1.02]" : "scale-90"}`}
-          >
-            <GraduationCap className="text-gray-200 w-1/2 h-1/2"/>
-
-            <div className={`${role == roles.STUDENT ? "block" : "hidden"} absolute top-0 right-1 sm:right-4 bg-gray-400 
-              h-10 w-10 sm:h-14 sm:w-14 rounded-full flex flex-col items-center justify-center`}
-            >
-              <Check className="text-blue-800 w-7 h-7"/>
-            </div>
-          </button>
-          
-          <p className="text-gray-700 text-xl font-medium">Aluno</p>
+          <RoleSelectionButton
+            label={"Aluno"}
+            icon={GraduationCap}
+            selected={role == roles.STUDENT}
+            onClick={() => roleClick(roles.STUDENT)}
+          />
         </div>
 
-        <div className="bg-inherit w-1/2 md:w-3/5 h-3/4 lg:h-10/12 mr-2 flex flex-col items-center gap-2">
-          <button
-            onClick={() => setUser(prev => ({ ...prev, role: roles.TEACHER}))} 
-            className={`bg-blue-800 relative w-full sm:w-4/5 xl:w-3/5 h-4/5 rounded-full flex flex-col 
-              items-center justify-center transition ${role == roles.TEACHER ? "scale-[1.02]" : "scale-90"}`}
-          >
-            <University className="text-gray-200 w-1/2 h-1/2"/>
+        <div className="w-full h-full flex flex-col items-center gap-2">
 
-            <div className={`${role == roles.TEACHER ? "block" : "hidden"} absolute top-0 right-1 sm:right-4 bg-gray-400 
-              h-10 w-10 sm:h-14 sm:w-14 rounded-full flex flex-col items-center justify-center`}
-            >
-              <Check className="text-blue-800 w-7 h-7"/>
-            </div>
-          </button>
-
-          <p className="text-gray-700 text-xl font-medium">Professor</p>
+          <RoleSelectionButton
+            label={"Professor"}
+            icon={University}
+            selected={role == roles.TEACHER}
+            onClick={() => roleClick(roles.TEACHER)} 
+          />
         </div>
+
+        <span className="w-full h-full hidden lg:flex flex-col items-center gap-2 ">
+          <RoleSelectionButton
+            label={"Admin"}
+            icon={ShieldUser}
+            selected={role == roles.ADMIN}
+            onClick={() => roleClick(roles.ADMIN)}
+          />
+        </span>
       </div>
 
-      <div className="bg-inherit w-full h-1/4 rounded-b-xl flex flex-col pt-4 gap-2 items-center justify-center">
+      <div className="w-full h-2/5 flex items-center justify-center lg:hidden">
+        <span className="w-1/2 h-full flex flex-col items-center gap-2">
+          <RoleSelectionButton
+            label={"Admin"}
+            icon={ShieldUser}
+            selected={role == roles.ADMIN}
+            onClick={() => roleClick(roles.ADMIN)}
+          />
+        </span>
+      </div>
+
+      <div className="w-full rounded-b-xl flex flex-1 flex-col mb-8 gap-2 items-center justify-end">
         <button
           onClick={onClickMoveRole} 
           disabled={role == ""}
-          className={`${role == "" ? "bg-gray-500" : "bg-blue-800"} text-gray-200 w-4/5 sm:w-3/5 xl:w-1/2 h-12 
-          rounded-xl hover:scale-[1.02] text-xl transition`}
+          className={`disabled:bg-gray-500 bg-blue-800 text-gray-200 w-4/5 sm:w-1/2 lg:w-2/5 h-14
+            rounded-xl hover:cursor-pointer text-2xl`}
         >
           Continuar
         </button>
 
         <Link
           to="/login"
-          className="text-base text-blue-700 hover:text-blue-600 transition"
+          className="text-lg text-blue-700 hover:text-blue-600 transition"
         >
           Já possui conta?
         </Link>
       </div>
-    </div>
+    </main>
  ) 
 }
