@@ -78,12 +78,15 @@ export function AssignmentsList(){
         :
         (
           <>
-            <PageTitleCard title={assignmentsList.className}/>
+            <PageTitleCard 
+              backTo={"/"}
+              title={assignmentsList.className}
+            />
 
             <PageNavigationSection 
               sectionTitle={"Tarefas"}
               leftRoute={`/participants/${classId}`}
-              rightRoute={`/posts/${classId}`}
+              rightRoute={user.role == roles.ADMIN ? `/stats/${classId}` : `/posts/${classId}`}
             />
 
             <>

@@ -145,7 +145,7 @@ export function Post(){
               )
               :
               (
-                <div className="flex flex-col gap-2 items-center justify-center w-10/12 lg:w-3/4 mt-2 pb-4">
+                <div className="flex flex-col gap-2 items-center justify-center w-full mt-2 pb-4">
                   {post.replies.map((reply, index) => (
                     <ReplyCard 
                       key={index}
